@@ -1,0 +1,10 @@
+This software is licensed from CEVA, Inc.
+Copyright (c) CEVA, Inc. and its licensors. 
+All rights reserved.  
+
+CEVA and the CEVA logo are trademarks of CEVA, Inc.
+
+You can contact CEVA, Sensor Fusion Business Unit on the web at 
+https://www.ceva-dsp.com/app/motion-sensing/ or at
+15245 Shady Grove Road, Suite 400, Rockville, MD 20850 USA
+
