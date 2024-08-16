@@ -1,6 +1,7 @@
 #include "CodeCell.h"
 #include "BNO085.h"
 
+bool 100ms_tick = 1;
 bool cc_timeflag = 1;
 bool ccps_timeflag = 1;
 hw_timer_t *cctimer = NULL;
@@ -11,6 +12,7 @@ BNO085 Motion;
 void IRAM_ATTR cc_Timer() {
   cc_timeflag = 1;
   ccps_timeflag = 1;
+  100ms_tick = 1;
 }
 
 CodeCell::CodeCell() {
@@ -112,19 +114,20 @@ void CodeCell::Test() {
 
 void CodeCell::USBSleep(bool cable_polarity) {
   bool sleep_flag = 1;
-  digitalWrite(1, LOW); /*Init Set up to output low*/
-  digitalWrite(2, LOW); /*Init Set up to output low*/
-  digitalWrite(3, LOW); /*Init Set up to output low*/
-  digitalWrite(5, LOW); /*Init Set up to output low*/
-  digitalWrite(6, LOW); /*Init Set up to output low*/
-  digitalWrite(7, LOW); /*Init Set up to output low*/
 
   if (cable_polarity) {
     Serial.println("Shutting down application..");
     while (digitalRead(0) == 0) {
       delay(100); /*Delay to ensure Serial output is visible*/
     }
-  } else {
+  } else {    
+    digitalWrite(1, LOW); /*Init Set up to output low*/
+    digitalWrite(2, LOW); /*Init Set up to output low*/
+    digitalWrite(3, LOW); /*Init Set up to output low*/
+    digitalWrite(5, LOW); /*Init Set up to output low*/
+    digitalWrite(6, LOW); /*Init Set up to output low*/
+    digitalWrite(7, LOW); /*Init Set up to output low*/
+    
     for (int er = 0; er < 10; er++) {
       LED(255U, 0, 0); /*Set LED to the minimum brightness Red*/
       delay(1000);
