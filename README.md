@@ -2,9 +2,9 @@
 A penny-sized board that can help you miniaturize DIY Robots, Wearables &amp; other IoT projects!! It includes an Arduino friendly ESP32-C3 Wifi &amp; BLE module, USBC LiPo Battery Charger with onboard Battery Connector, Light Sensor, and an optional Motion Sensor
 
 
-# Getting started with the CodeCell Library:
+## Getting started with the CodeCell Library:
 
-## Init()
+### Init()
 - To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more of the predefined macros. Each macro corresponds to a specific sensing function. Here are the available macros:
   
   - `LIGHT`                          // Enables Light Sensing
@@ -27,11 +27,11 @@ A penny-sized board that can help you miniaturize DIY Robots, Wearables &amp; ot
 
 Note: You can combine multiple macros using the `+` operator to initialize multiple sensors.
 
-## Run()
+### Run()
 - Call the `myCodeCell.Run()` function in the `loop()` to manage battery and power. This function also handles the onboard LED to indicate power status. When the battery voltage falls below 3.3V, the LED will blink red 10 times and then go into Sleep Mode until the USB cable is connected for charging. While charging, the CodeCell will shut down the application, light the LED blue, and wait until the battery is fully charged. Once fully charged, it will start a breathing-light animation with a speed corresponding to the proximity distance. The LED will shine green when powered by the battery and blue when powered via USB.
 
 
-## Read
+### Read
 
 - After initializing the sensors, you can use the following functions to read data from them:
 
