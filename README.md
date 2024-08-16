@@ -1,5 +1,7 @@
 # CodeCell
-A penny-sized board that can help you miniaturize DIY Robots, Wearables &amp; other IoT projects!! It includes an Arduino friendly ESP32-C3 Wifi &amp; BLE module, USBC LiPo Battery Charger with onboard Battery Connector, Light Sensor, and an optional Motion Sensor
+CodeCell is a penny-sized board that helps you miniaturize your DIY robots, wearables, and IoT projects with ease! Designed for all makers, it features an Arduino-friendly ESP32-C3 Wi-Fi & BLE module, programmable through a standard USB-C cable ~ which can also charge a LiPo battery that easily plugs into the onboard connector.
+
+That’s not all! We've created a CodeCell library to make it easier to interact with the onboard sensors ~ it's Light Sensor can detect darkness and measure proximity up to 20 cm! While the optional Motion Sensor features a 9-axis sensor-fusion IMU to measure angular rotations, step counts, personal activity, tapping, gravity, acceleration, rate of rotation, magneticfields and more!
 
 
 ## Getting started with the CodeCell Library:
