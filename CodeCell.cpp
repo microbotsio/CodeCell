@@ -17,6 +17,7 @@ CodeCell::CodeCell() {
 
 void CodeCell::Init(uint16_t sense_motion) {
   uint8_t light_timer = 0;
+  delay(1200); /*Uart Setup delay*/
 
   if (WakeUpCheck()) {
     Serial.println("Waking up..");
