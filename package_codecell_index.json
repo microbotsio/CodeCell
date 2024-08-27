@@ -1,23 +1,23 @@
 {
   "packages": [
     {
-      "name": "CodeCell", // Name of the board package, reflecting that it's for a single board
+      "name": "CodeCell",
       "maintainer": "Microbots",
-      "websiteURL": "https://github.com/microbotsio/CodeCell", // Direct link to the CodeCell repository
+      "websiteURL": "https://github.com/microbotsio/CodeCell",
       "email": "info@microbots.io",
       "help": {
-        "online": "https://github.com/microbotsio/CodeCell" // Link to more help or documentation
+        "online": "https://github.com/microbotsio/CodeCell"
       },
       "platforms": [
         {
-          "name": "CodeCell Platform", // This can be a descriptive name for the platform
+          "name": "CodeCell Platform",
           "architecture": "esp32",
-          "version": "1.1.6", // Version of your board package
+          "version": "1.1.6",
           "category": "ESP32",
           "url": "https://github.com/microbotsio/CodeCell/releases/download/1.1.6/codecell-1.1.6.zip",
           "archiveFileName": "codecell-1.1.6.zip",
-          "checksum": "SHA-256:checksum-value", // Update with actual checksum
-          "size": "123456789", // Update with actual file size
+          "checksum": "SHA-256:CA04F0C6CC715FBDB18C1727D60F3F382EB74BB00C7B4D77EBD3E29FF758EDAB",
+          "size": "61800",
           "boards": [
             {
               "name": "CodeCell",
