@@ -580,7 +580,8 @@ uint16_t CodeCell::Motion_StateRead() {
 
 uint16_t CodeCell::Motion_ActivityRead() {
   uint16_t x = 0;
-  Motion_Read();
+  //Motion_Read();
+  Wire.beginTransmission(BNO085_ADDRESS);
   if (Motion.getSensorEvent() == true) {
     if (Motion.getSensorEventID() == SENSOR_REPORTID_PERSONAL_ACTIVITY_CLASSIFIER) {
       x = Motion.getActivityClassifier();
