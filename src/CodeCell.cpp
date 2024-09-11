@@ -334,7 +334,7 @@ void CodeCell::PrintSensors() {
           Serial.print("Climbing Stairs");
           break;
         default:
-          Serial.print("Unkown");
+          Serial.print("Stable");
           break;
       }
     }
@@ -651,7 +651,7 @@ void CodeCell::Motion_Read() {
   uint8_t imu_read_timer = 0U;
   Wire.beginTransmission(BNO085_ADDRESS);
   while (Motion.getSensorEvent() == false) {
-    if (imu_read_timer > 100U) {
+    if (imu_read_timer > 300U) {
       Serial.println(" CodeCell Error - Motion Sensor not found");
       Serial.println("Reseting");
       delay(100);
