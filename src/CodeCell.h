@@ -4,13 +4,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define CODECELL_SW_VERSION "1.2.0"
+#define CODECELL_SW_VERSION "1.2.1"
 
 #define POWER_BAT_CHRG 0U
 #define POWER_USB 1U
 #define POWER_INIT 2U
 #define POWER_BAT_CHRG_FULL 4U
-#define USB_VOLTAGE 4200
+#define USB_VOLTAGE 4100
 #define MIN_BATTERY_VOLTAGE 3350
 
 #define LED_PIN 10U
