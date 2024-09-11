@@ -1,9 +1,10 @@
 /*
  * Overview:
- * This code brings your Flappy Bot to life! 
+ * In this example, we'll explore how to use the proximity sensor to read depth gestures and brings your Flappy Bot to life! 
  * With this example the CodeCell controls two FlatFlaps that stops flapping when proximity is detected.
  * Their angle gets adjusted dynamically based on how close something gets.
  * Feel free to tweak the code with your own creative ideas, or add motion sensing for a new reaction! 
+ * Learn more about this example here - https://microbots.io/blogs/learn/codecell-depth-gestures
  */
 
 #include <CodeCell.h>
