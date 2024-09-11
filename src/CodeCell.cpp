@@ -331,10 +331,10 @@ void CodeCell::PrintSensors() {
           Serial.print("Running");
           break;
         case 8:
-          Serial.print("Climbing Stairs");
+          Serial.print("Stairs");
           break;
         default:
-          Serial.print("Stable");
+          Serial.print("Reading..");
           break;
       }
     }
