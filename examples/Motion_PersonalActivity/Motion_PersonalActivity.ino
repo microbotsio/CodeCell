@@ -1,3 +1,11 @@
+/*
+ * Overview:
+ * In this example we'll explore how to configure the CodeCell's onboard motion sensor to try and guess the personal activate you're doing. a
+ * This activity guess will be read every 1000ms and displayed on an OLED display.
+ * Feel free to tweak the code with your own creative ideas! 
+ * Learn more about this example here - https://microbots.io/blogs/learn/codecell-personal-activity-guessing
+ */
+
 #include <CodeCell.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -6,7 +14,7 @@
 CodeCell myCodeCell;
 
 /*Configure up the OLED Displaay*/
-#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_WIDTH 64  // OLED display width, in pixels
 #define SCREEN_HEIGHT 32  // OLED display height, in pixels
 
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
