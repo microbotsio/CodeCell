@@ -1,3 +1,10 @@
+/*
+ * Overview:
+ * In this example we'll explore how to use the CodeCell's onboard motion sensor to measure step counts.
+ * These counts are read every 100ms and displayed on an OLED display.
+ * Feel free to tweak the code with your own creative ideas! 
+ * Learn more about this example here - https://microbots.io/blogs/learn/codecell-step-counter
+ */
 #include <CodeCell.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -6,7 +13,7 @@
 CodeCell myCodeCell;
 
 /*Configure up the OLED Displaay*/
-#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_WIDTH 64  // OLED display width, in pixels
 #define SCREEN_HEIGHT 32  // OLED display height, in pixels
 
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
