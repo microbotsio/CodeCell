@@ -592,58 +592,41 @@ uint16_t CodeCell::Motion_ActivityRead() {
 }
 
 void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0;
-  float Ri = 0;
-  float Rj = 0;
-  float Rk = 0;
-  float sRi = 0;
-  float sRj = 0;
-  float sRk = 0;
-  float sRr = 0;
+  float Rr = 0; 
+  float Ri = 0; 
+  float Rj = 0; 
+  float Rk = 0; 
 
   Motion_Read();
   if (Motion.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
-    Rr = Motion.getRot_R();
-    Ri = Motion.getRot_I();
-    Rj = Motion.getRot_J();
-    Rk = Motion.getRot_K();
-    sRi = sq(Ri);
-    sRj = sq(Rj);
-    sRk = sq(Rk);
-    sRr = sq(Rr);
+    Rr = Motion.getRot_R(); 
+    Ri = Motion.getRot_I(); 
+    Rj = Motion.getRot_J(); 
+    Rk = Motion.getRot_K(); 
 
-    roll = asin(-2.0 * (Ri * Rk - Rj * Rr) / (sRi + sRj + sRk + sRr)) * RAD_TO_DEG;  /*ROLL*/
-    pitch = atan2(2.0 * (Rj * Rk + Ri * Rr), (-sRi - sRj + sRk + sRr)) * RAD_TO_DEG; /*PITCH*/
-    yaw = atan2(2.0 * (Ri * Rj + Rk * Rr), (sRi - sRj - sRk + sRr)) * RAD_TO_DEG;    /*YAW*/
+    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG; /* ROLL */
+    pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
+    yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
   }
   Wire.endTransmission();
 }
 
 void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0;
-  float Ri = 0;
-  float Rj = 0;
-  float Rk = 0;
-  float sRi = 0;
-  float sRj = 0;
-  float sRk = 0;
-  float sRr = 0;
+  float Rr = 0; 
+  float Ri = 0; 
+  float Rj = 0; 
+  float Rk = 0; 
 
   Motion_Read();
-
   if (Motion.getSensorEventID() == SENSOR_REPORTID_GAME_ROTATION_VECTOR) {
     Rr = Motion.getGameReal();
     Ri = Motion.getGameI();
     Rj = Motion.getGameJ();
     Rk = Motion.getGameK();
-    sRi = sq(Ri);
-    sRj = sq(Rj);
-    sRk = sq(Rk);
-    sRr = sq(Rr);
 
-    roll = asin(-2.0 * (Ri * Rk - Rj * Rr) / (sRi + sRj + sRk + sRr)) * RAD_TO_DEG;  /*ROLL*/
-    pitch = atan2(2.0 * (Rj * Rk + Ri * Rr), (-sRi - sRj + sRk + sRr)) * RAD_TO_DEG; /*PITCH*/
-    yaw = atan2(2.0 * (Ri * Rj + Rk * Rr), (sRi - sRj - sRk + sRr)) * RAD_TO_DEG;    /*YAW*/
+    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG; /* ROLL */
+    pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
+    yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
   }
   Wire.endTransmission();
 }
