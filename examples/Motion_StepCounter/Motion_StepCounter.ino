@@ -27,6 +27,7 @@ void setup() {
 
   myCodeCell.Init(MOTION_STEP_COUNTER); /*Initializes Step Counter Sensing*/
 
+  /*Set up OLED display*/
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println("Display Error");
   }
