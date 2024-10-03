@@ -25,7 +25,7 @@ uint16_t step_counter = 0;
 void setup() {
   Serial.begin(115200); /* Set Serial baud rate to 115200. Ensure Tools/USB_CDC_On_Boot is enabled if using Serial. */
 
-  myCodeCell.Init(MOTION_STEP_COUNTER); /*Initializes Step Counter & Activity Sensing*/
+  myCodeCell.Init(MOTION_STEP_COUNTER); /*Initializes Step Counter Sensing*/
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println("Display Error");
@@ -40,8 +40,10 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run()) {
-    myCodeCell.Motion_StepCounterRead(step_counter);
+    /*Runs  every 100ms*/    
+    myCodeCell.Motion_StepCounterRead(step_counter); /*Read if a new Step was made*/
 
+    /*Update Display*/
     display.clearDisplay();
     display.setCursor(32, 16);  // Start at top-left corner
     display.print(F("Steps: "));
