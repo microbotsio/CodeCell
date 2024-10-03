@@ -15,7 +15,7 @@
 CodeCell myCodeCell;
 
 /*Configure up the OLED Displaay*/
-#define SCREEN_WIDTH 64  // OLED display width, in pixels
+#define SCREEN_WIDTH 128  // OLED display width, in pixels
 #define SCREEN_HEIGHT 32  // OLED display height, in pixels
 
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
