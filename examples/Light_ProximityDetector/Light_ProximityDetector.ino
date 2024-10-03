@@ -11,7 +11,7 @@ CodeCell myCodeCell;
 
 void setup() {
     Serial.begin(115200); // Set Serial baud rate to 115200. Ensure Tools/USB_CDC_On_Boot is enabled if using Serial
-    myCodeCell.Init(LIGHT); // Initializes light sensing, including proximity
+    myCodeCell.Init(LIGHT); // Initializes light sensing
 }
 
 void loop() {
