@@ -69,6 +69,7 @@ The SparkFun BNO08x library, originally written by Nathan Seidle and adjusted by
 Additionally, this project incorporates the official [CEVA SH2 sensor hub library](https://github.com/ceva-dsp/sh2/tree/main), which is licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 CEVA’s notice is as follows:
+
 This software is licensed from CEVA, Inc.  
 Copyright (c) CEVA, Inc. and its licensors. All rights reserved.  
 CEVA and the CEVA logo are trademarks of CEVA, Inc.  
