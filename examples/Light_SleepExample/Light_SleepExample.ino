@@ -5,8 +5,6 @@
  * You can modify the code for your specific application needs, or configure it to wake up using a different sensor.
  */
 
-
-
 #include <CodeCell.h>
 
 CodeCell myCodeCell;
@@ -32,6 +30,7 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run()) {
+    /*Runs  every 100ms*/
     if (myCodeCell.Light_ProximityRead() < 10) {
       myCodeCell.Sleep(1); /*If Proxity not detected go to sleep & check again after 1 sec*/
     }
