@@ -22,6 +22,7 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run()) {
+    /*Runs  every 100ms*/
     myCodeCell.Motion_RotationRead(Roll, Pitch, Yaw);
     Serial.printf("Roll: %.2f°, Pitch: %.2f°, Yaw: %.2f°\n", Roll, Pitch, Yaw);
   }
