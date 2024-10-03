@@ -6,6 +6,8 @@ CodeCell is a penny-sized board that helps you miniaturize your DIY robots, wear
 
 ## Getting started with the CodeCell Library:
 
+A full guide to get you started with CodeCell can be found [here](https://microbots.io/blogs/learn/codecell-basics-your-first-steps).
+
 ### Init()
 - To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more of the predefined macros. Each macro corresponds to a specific sensing function. Here are the available macros:
   
