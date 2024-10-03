@@ -18,28 +18,29 @@ float Yaw = 0.0;
 int servo_angle = 0;
 
 void setup() {
-    Serial.begin(115200); // Set Serial baud rate to 115200. Ensure Tools/USB_CDC_On_Boot is enabled if using Serial
-    myCodeCell.Init(MOTION_ROTATION); // Initializes rotation sensing
-    myservo.attach(1);  // Attaches the servo on pin 1 to the servo object
+    Serial.begin(115200); /*Set Serial baud rate to 115200. Ensure Tools/USB_CDC_On_Boot is enabled if using Serial*/
+    
+    myCodeCell.Init(MOTION_ROTATION); /*Initializes rotation sensing */
+    myservo.attach(1);  /*Attaches the servo on pin 1 to the servo object*/
 }
 
 void loop() {
-    if (myCodeCell.Run()) {
-        // Read rotation angles from the BNO085 sensor
-        myCodeCell.Motion_RotationRead(Roll, Pitch, Yaw);
+    if (myCodeCell.Run()) { /*Runs  every 100ms*/
         
-        // Convert the pitch angle to a servo angle
-        servo_angle = abs((int)Pitch);
+        myCodeCell.Motion_RotationRead(Roll, Pitch, Yaw); /* Read rotation angles from the BNO085 sensor*/
+        
+        
+        servo_angle = abs((int)Pitch);/*Convert the pitch angle to a servo angle*/
         servo_angle = (180 - servo_angle);
         
-        // Limit the servo angle to the range 0-60 degrees
+        /*Limit the servo angle to the range 0-60 degrees*/
         if (servo_angle > 60) {
             servo_angle = 60;
         } else if (servo_angle < 0) {
             servo_angle = 0;
         }
         
-        Serial.println(servo_angle); // Print the servo angle for debugging
-        myservo.write(servo_angle);  // Set the servo position
+        Serial.println(servo_angle); /* Print the servo angle for debugging */
+        myservo.write(servo_angle);  /* Set the servo position */
     }
 }
