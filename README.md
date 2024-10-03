@@ -62,7 +62,7 @@ Note: You can combine multiple macros using the `+` operator to initialize multi
 Note: You can use `myCodeCell.PrintSensors()` to print the values of all enabled sensors on the Serial Monitor.
 
 ## Attribution
-This 'CodeCell' library contains various features, including IMU sensor functionality and a custom light sensor implementation. The VCNL4040 light sensor code does not rely on any external libraries. But some of the BNO085 Motion-sensor functions were adapted from the [SparkFun BNO08x Arduino Library](https://github.com/sparkfun/SparkFun_BNO08x_Arduino_Library) and the official library provided by [CEVA](https://github.com/ceva-dsp/sh2/tree/main) for the SH2 sensor hub.
+This 'CodeCell' library contains various features, device intialization, power managment, light sensning and motion sensing. The VCNL4040 light sensor code does not rely on any external libraries. But some of the BNO085 Motion-sensor functions were adapted from the [SparkFun BNO08x Arduino Library](https://github.com/sparkfun/SparkFun_BNO08x_Arduino_Library) and the official library provided by [CEVA](https://github.com/ceva-dsp/sh2/tree/main) for the SH2 sensor hub.
 
 The SparkFun BNO08x library, originally written by Nathan Seidle and adjusted by Pete Lewis at SparkFun Electronics, is released under the MIT License. Significant modifications were made to integrate it with the 'CodeCell' library.
 
