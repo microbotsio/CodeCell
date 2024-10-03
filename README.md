@@ -60,3 +60,17 @@ Note: You can combine multiple macros using the `+` operator to initialize multi
   - `myCodeCell.Motion_RotationRead(myRoll, myPitch, myYaw);`
 
 Note: You can use `myCodeCell.PrintSensors()` to print the values of all enabled sensors on the Serial Monitor.
+
+## Attribution
+This 'CodeCell' library contains various features, including IMU sensor functionality and a custom light sensor implementation. The VCNL4040 light sensor code does not rely on any external libraries. But some of the BNO085 Motion-sensor functions were adapted from the [SparkFun BNO08x Arduino Library](https://github.com/sparkfun/SparkFun_BNO08x_Arduino_Library) and the official library provided by [CEVA](https://github.com/ceva-dsp/sh2/tree/main) for the SH2 sensor hub.
+
+The SparkFun BNO08x library, originally written by Nathan Seidle and adjusted by Pete Lewis at SparkFun Electronics, is released under the MIT License. Significant modifications were made to integrate it with the 'CodeCell' library.
+
+Additionally, this project incorporates the official [CEVA SH2 sensor hub library](https://github.com/ceva-dsp/sh2/tree/main), which is licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+CEVA’s notice is as follows:
+This software is licensed from CEVA, Inc.  
+Copyright (c) CEVA, Inc. and its licensors. All rights reserved.  
+CEVA and the CEVA logo are trademarks of CEVA, Inc.  
+For more information, visit [CEVA's website](https://www.ceva-dsp.com/app/motion-sensing/).
+
