@@ -9,7 +9,8 @@
 #include <CodeCell.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>#include <CodeCell.h>
+#include <Adafruit_SSD1306.h>
+#include <CodeCell.h>
 
 CodeCell myCodeCell;
 
@@ -41,6 +42,7 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run()) {
+    /*Runs  every 100ms*/
     if (read_timer < 10) {
       read_timer++;
     } else {
