@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define CODECELL_SW_VERSION "1.2.2"
+#define CODECELL_SW_VERSION "1.2.3"
 
 #define POWER_BAT_CHRG 0U
 #define POWER_USB 1U
