@@ -19,7 +19,7 @@ CodeCell::CodeCell() {
 void CodeCell::Init(uint16_t sense_motion) {
   uint8_t light_timer = 0;
 
-  delay(1200); /*Uart Setup delay*/
+  delay(1300); /*Uart Setup delay*/
 
   if (Serial) {
     serial_flag = 1;
@@ -39,22 +39,6 @@ void CodeCell::Init(uint16_t sense_motion) {
   }
 
   _msense = sense_motion;
-  pinMode(0, INPUT); /*Set up Cable indication pin*/
-  pinMode(4, INPUT); /*Set up Battery Voltage Read pin*/
-  analogSetAttenuation(ADC_11db);
-
-  pinMode(1, OUTPUT);
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  digitalWrite(1, LOW); /*Init Set up to output low*/
-  digitalWrite(2, LOW); /*Init Set up to output low*/
-  digitalWrite(3, LOW); /*Init Set up to output low*/
-  digitalWrite(5, LOW); /*Init Set up to output low*/
-  digitalWrite(6, LOW); /*Init Set up to output low*/
-  digitalWrite(7, LOW); /*Init Set up to output low*/
 
   Serial.print("Please wait while I setup my sensors.. ");
 
@@ -76,8 +60,7 @@ void CodeCell::Init(uint16_t sense_motion) {
     Serial.println("Light Sensing Enabled..");
   }
   Serial.print("Printing Sensors Readings.. ");
-  PrintSensors();
-
+  
   pinMode(LED_PIN, OUTPUT);   /*Set LED pin as output*/
   digitalWrite(LED_PIN, LOW); /*Init Set up to output low*/
   delay(1);
@@ -93,6 +76,25 @@ void CodeCell::Init(uint16_t sense_motion) {
   delay(80);
   LED(0, 0, 0);
 
+
+  pinMode(0, INPUT); /*Set up Cable indication pin*/
+  pinMode(4, INPUT); /*Set up Battery Voltage Read pin*/
+  analogSetAttenuation(ADC_11db);
+
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  digitalWrite(1, LOW); /*Init Set up to output low*/
+  digitalWrite(2, LOW); /*Init Set up to output low*/
+  digitalWrite(3, LOW); /*Init Set up to output low*/
+  digitalWrite(5, LOW); /*Init Set up to output low*/
+  digitalWrite(6, LOW); /*Init Set up to output low*/
+  digitalWrite(7, LOW); /*Init Set up to output low*/
+
+  PrintSensors();
 
   cctimer = timerBegin(1000000);            /*Set timer frequency to 1Mhz*/
   timerAttachInterrupt(cctimer, &cc_Timer); /*Attach interrupt*/
@@ -190,7 +192,7 @@ void CodeCell::USBSleep(bool cable_polarity) {
     Serial.println("Shutting down application.."); /*Shut down but do not go to sleep to allow reprogramming*/
     delay(100);
     while (digitalRead(0) == 0) {
-      delay(1); 
+      delay(1);
     }
     esp_restart();
   } else {
@@ -199,6 +201,10 @@ void CodeCell::USBSleep(bool cable_polarity) {
       delay(1000);
       LED(0, 0, 0); /*Set LED to the minimum brightness Red*/
       delay(1000);
+      if (digitalRead(0) == 0) {
+        /*USB Connected stop blink & Reset*/
+        esp_restart();
+      }
     }
 
     _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_MS_REG; /*Address*/
@@ -358,8 +364,8 @@ bool CodeCell::Run() {
     if ((battery_voltage > USB_VOLTAGE) || (digitalRead(0) == 0)) {
       _lowvoltage_counter = 0;
       _chrg_counter = 0;
-      if(_charge_state == POWER_BAT_CHRG){
-          esp_restart(); /*Restart the CodeCell*/
+      if (_charge_state == POWER_BAT_CHRG) {
+        esp_restart(); /*Restart the CodeCell*/
       }
       if (digitalRead(0) == 0) {
         Serial.print("Battery is now charging.. ");
@@ -591,20 +597,21 @@ uint16_t CodeCell::Motion_ActivityRead() {
   return x;
 }
 
+
 void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0; 
-  float Ri = 0; 
-  float Rj = 0; 
-  float Rk = 0; 
+  float Rr = 0;
+  float Ri = 0;
+  float Rj = 0;
+  float Rk = 0;
 
   Motion_Read();
   if (Motion.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
-    Rr = Motion.getRot_R(); 
-    Ri = Motion.getRot_I(); 
-    Rj = Motion.getRot_J(); 
-    Rk = Motion.getRot_K(); 
+    Rr = Motion.getRot_R();
+    Ri = Motion.getRot_I();
+    Rj = Motion.getRot_J();
+    Rk = Motion.getRot_K();
 
-    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG; /* ROLL */
+    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG;  /* ROLL */
     pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
     yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
   }
@@ -612,10 +619,10 @@ void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
 }
 
 void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0; 
-  float Ri = 0; 
-  float Rj = 0; 
-  float Rk = 0; 
+  float Rr = 0;
+  float Ri = 0;
+  float Rj = 0;
+  float Rk = 0;
 
   Motion_Read();
   if (Motion.getSensorEventID() == SENSOR_REPORTID_GAME_ROTATION_VECTOR) {
@@ -624,7 +631,7 @@ void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
     Rj = Motion.getGameJ();
     Rk = Motion.getGameK();
 
-    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG; /* ROLL */
+    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG;  /* ROLL */
     pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
     yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
   }
