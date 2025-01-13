@@ -15,7 +15,7 @@ A full guide to get you started with CodeCell can be found [here](https://microb
   - `MOTION_ACCELEROMETER`           // Enables Accelerometer Sensing
   - `MOTION_GYRO`                    // Enables Gyroscope Sensing
   - `MOTION_MAGNETOMETER`            // Enables Magnetometer Sensing
-  - `MOTION_LINEAR_ACC`              // Enables Linear Acceleration Sensing
+  - `MOTION_LINEAR_ACC`              // Enables Linear Acceleration Sensing (without gravity component)
   - `MOTION_GRAVITY`                 // Enables Gravity Sensing
   - `MOTION_ROTATION`                // Enables Rotation Sensing
   - `MOTION_ROTATION_NO_MAG`         // Enables Rotation Sensing without Magnetometer
