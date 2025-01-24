@@ -58,5 +58,7 @@ void onDataRecv(const esp_now_recv_info *recvInfo, const uint8_t *incomingData, 
 }
 
 void loop() {
-  if (myCodeCell.Run()) {}
+  if (myCodeCell.Run(10)) { 
+    /*Run every 100ms (10Hz)*/
+  }
 }
