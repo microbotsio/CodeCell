@@ -29,8 +29,7 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run()) {
-    /*Runs  every 100ms*/
+  if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/
     if (myCodeCell.Light_ProximityRead() < 10) {
       myCodeCell.Sleep(1); /*If Proxity not detected go to sleep & check again after 1 sec*/
     }
