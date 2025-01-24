@@ -40,8 +40,7 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run()) {
-    /*Runs  every 100ms*/    
+  if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/  
     myCodeCell.Motion_StepCounterRead(step_counter); /*Read if a new Step was made*/
 
     /*Update Display*/
