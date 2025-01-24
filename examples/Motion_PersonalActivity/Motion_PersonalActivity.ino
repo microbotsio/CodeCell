@@ -42,7 +42,6 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/
-    /*Runs  every 100ms*/
     if (read_timer < 10) {
       read_timer++;
     } else {
