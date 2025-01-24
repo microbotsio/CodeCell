@@ -33,8 +33,8 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run()) {
-    /*Runs  every 100ms*/
+  if (myCodeCell.Run(10)) {
+    /*Runs every 100ms (10Hz)*/
     uint16_t proximity = myCodeCell.Light_ProximityRead();
     Serial.println(proximity);
     if (proximity < 100) {
