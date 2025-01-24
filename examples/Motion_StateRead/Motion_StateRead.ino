@@ -17,8 +17,7 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run()) {
-    /*Runs  every 100ms*/
+  if (myCodeCell.Run(10)) { /*Run every 100ms (10Hz)*/
     Serial.print("State: ");
     switch (myCodeCell.Motion_StateRead()) {
       case MOTION_STATE_STABLE:
