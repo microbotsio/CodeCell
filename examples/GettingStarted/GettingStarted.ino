@@ -34,11 +34,13 @@ CodeCell myCodeCell;
  * 
  **** Running the Code (`Run` function):
  * 
- * Call the `myCodeCell.Run()` function in the `loop()` to manage battery and power. This function returns true every 100ms and
- * also handles the onboard LED to indicate power status. When the battery voltage falls below 3.3V, the LED will blink red 10 times 
- * and then go into Sleep Mode until the USB cable is connected for charging. While charging, the CodeCell will shut down the application, 
- * light the LED blue, and wait until the battery is fully charged. Once fully charged, it will start a breathing-light animation with a speed
- * corresponding to the proximity distance. The LED will shine green when powered by the battery and blue when powered via USB.
+ * Call the myCodeCell.Run(frequency) function in the loop() to manage battery and power. This function returns true at the specified frequency, 
+ * between 10Hz and 100Hz, depending on the value passed (e.g., Run(10) returns true every 10Hz, and Run(100) returns true every 100Hz). The battery 
+ * and power status are checked every 10Hz. This function also handles the onboard LED to indicate power status. When the battery voltage falls below 
+ * 3.3V, the LED will blink red 10 times and then enter Sleep Mode until the USB cable is connected for charging. While charging, the CodeCell will 
+ * shut down the application, light the LED blue, and wait until the battery is fully charged. Once fully charged, it will turn Green. Once the cable  
+ * is disconnected it will start a green breathing-light animation with a speed corresponding to the proximity distance. The LED will shine green when 
+ * powered by the battery and blue when powered via USB.
  * 
  **** Reading Sensor Data:
  * 
@@ -77,8 +79,8 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run()) {
+  if (myCodeCell.Run(10)) {
     /*Runs  every 100ms - Put your code here*/
-    myCodeCell.PrintSensors(); /*Print Sensors data every 100ms*/
+    myCodeCell.PrintSensors(); /*Print Sensors data every 100ms (10Hz)*/
   }
 }
