@@ -15,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-    if (myCodeCell.Run()) {  /*Run every 100ms (10Hz)*/
+    if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/
         uint16_t proximity = myCodeCell.Light_ProximityRead();
         
         // Check if an object is within range
