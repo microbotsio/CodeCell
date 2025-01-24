@@ -16,8 +16,7 @@ void setup() {
 }
 
 void loop() {
-    if (myCodeCell.Run()) {
-        // Runs every 100ms to check for taps
+    if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/
         if (myCodeCell.Motion_TapRead()) {
             // If a tap is detected, shine the LED yellow for 1 second
             myCodeCell.LED(0xA0, 0x60, 0x00); // Set LED to yellow
