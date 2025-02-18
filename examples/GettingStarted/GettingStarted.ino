@@ -81,7 +81,7 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run(10)) { //Set to run every 10Hz
+  if (myCodeCell.Run(10)) { //Run every 10Hz
     myCodeCell.PrintSensors(); //Print sensors data 
   }
 }
