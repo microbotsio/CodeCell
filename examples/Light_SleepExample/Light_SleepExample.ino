@@ -10,26 +10,27 @@
 CodeCell myCodeCell;
 
 void setup() {
-  Serial.begin(115200); /*If not enabled, set Serial baud rate to 115200*/
+  Serial.begin(115200); 
 
-  delay(60);
+  delay(60);//Waking up from Sleep - add a small delay for Serial
   if (myCodeCell.WakeUpCheck()) {
-    /*Waking up from Sleep - Initialize sensor*/
+    // Initialize light sensor
     while (myCodeCell.Light_Init() == 1) {
       delay(1);
-      myCodeCell.LightReset(); /*If sensor not set up, reset it*/
+      myCodeCell.LightReset(); //If sensor not responding, reset it
     }
     delay(40);
+    myCodeCell.Light_Read();//Read value from light sensor
     if (myCodeCell.Light_ProximityRead() < 10) {
-      myCodeCell.Sleep(1); /*If Proxity still not detected go to sleep & check again after 1 sec*/
+      myCodeCell.Sleep(1); //If Proxity still not detected go back to sleep & check again after 1 sec
     }
   }
 
-  myCodeCell.Init(LIGHT); /*Initializes CodeCell*/
+  myCodeCell.Init(LIGHT); //Time to wake up - Initializes all CodeCell peripherals
 }
 
 void loop() {
-  if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/
+  if (myCodeCell.Run(10)) {  //Run every 10Hz
     if (myCodeCell.Light_ProximityRead() < 10) {
       myCodeCell.Sleep(1); /*If Proxity not detected go to sleep & check again after 1 sec*/
     }
