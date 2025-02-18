@@ -25,7 +25,7 @@ void setup() {
 }
 
 void loop() {
-    if (myCodeCell.Run(10)) { /*Run every 100ms (10Hz)*/
+    if (myCodeCell.Run(10)) { //Run every 10Hz
         
         myCodeCell.Motion_RotationRead(Roll, Pitch, Yaw); /* Read rotation angles from the BNO085 sensor*/
         
