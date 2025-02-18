@@ -76,6 +76,12 @@ private:
   float xx = 0;
   float yy = 0;
   float zz = 0;
+  bool _tap_data = 0;
+  uint16_t _step_data = 0;
+  uint8_t _mstate_data = 0;
+  uint8_t _activity_data = 0;
+  uint16_t _light_data[3] = { 0 };
+  float _motion_data[23] = { 0.0 };
 
 public:
   CodeCell();
@@ -93,6 +99,7 @@ public:
 
   bool Light_Init();
   void LightReset();
+  void Light_Read();
   uint16_t Light_ProximityRead();
   uint16_t Light_WhiteRead();
   uint16_t Light_AmbientRead();
@@ -104,12 +111,12 @@ public:
   void Motion_MagnetometerRead(float &x, float &y, float &z);
   void Motion_GravityRead(float &x, float &y, float &z);
   void Motion_LinearAccRead(float &x, float &y, float &z);
-  void Motion_StepCounterRead(uint16_t &x);
   void Motion_RotationRead(float &roll, float &pitch, float &yaw);
   void Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw);
   bool Motion_TapRead();
   uint16_t Motion_StateRead();
   uint16_t Motion_ActivityRead();
+  uint16_t Motion_StepCounterRead();
 };
 
 #endif
