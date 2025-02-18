@@ -196,8 +196,8 @@ void CodeCell::USBSleep(bool cable_polarity) {
     while (digitalRead(0) == 0) {
       delay(1);
     }
-    Serial.println(">> Power Status: Battery is fully charged | Disconnect Cable"); 
-    LED(0, LED_SLEEP_BRIGHTNESS, 0);/*Set LED to the minimum brightness Green*/
+    Serial.println(">> Power Status: Battery is fully charged | Disconnect Cable");
+    LED(0, LED_SLEEP_BRIGHTNESS, 0); /*Set LED to the minimum brightness Green*/
     delay(1000);
     while (BatteryRead() > USB_VOLTAGE) {
       delay(1);
@@ -296,9 +296,8 @@ void CodeCell::PrintSensors() {
       Serial.printf(" Roll: %.2f°, Pitch: %.2f°, Yaw: %.2f° |", xx, yy, zz);
     }
     if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
-      Motion_StepCounterRead(xxtemp);
       Serial.print(" Steps: ");
-      Serial.print(xxtemp);
+      Serial.print(Motion_StepCounterRead());
       Serial.print(" |");
     }
     if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
@@ -373,6 +372,13 @@ bool CodeCell::Run(uint8_t run_frequency) {
   if (cc_timeflag) {
     tt_flag = 1;
     cc_timeflag = 0;
+
+    if ((_msense & LIGHT) == LIGHT) {
+      Light_Read();
+    }
+    if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
+      Motion_Read();
+    }
 
     if (run_frequency > 100) {
       run_frequency = 100;
@@ -473,7 +479,11 @@ void CodeCell::LED_Breathing(uint32_t rgb_color_24bit) {
   uint32_t r_counter = (rgb_color_24bit >> 16) & 0xFFU;
   uint32_t g_counter = (rgb_color_24bit >> 8) & 0xFFU;
   uint32_t b_counter = rgb_color_24bit & 0xFFU;
-  uint16_t getProx = Light_ProximityRead();
+  uint16_t getProx = 100;
+
+  if ((_msense & LIGHT) == LIGHT) {
+    getProx = Light_ProximityRead();
+  }
 
   if (getProx > 2000U) {
     getProx = 2000U;
@@ -507,188 +517,254 @@ void CodeCell::LED_Breathing(uint32_t rgb_color_24bit) {
 }
 
 uint16_t CodeCell::Light_AmbientRead() {
-  uint16_t value = 0;
-  Wire.beginTransmission(VCNL4040_ADDRESS);
-  Wire.write(VCNL4040_AMBIENT_REG);
-  Wire.endTransmission(false); /*Don't release the bus*/
-  I2CRead(VCNL4040_ADDRESS, _i2c_read_array, 2);
-  Wire.endTransmission();
-  value = _i2c_read_array[0];         /*LSB*/
-  value |= (_i2c_read_array[1] << 8); /*MSB*/
-  return value;
+  if ((_msense & LIGHT) == LIGHT) {
+    return _light_data[2];
+  } else {
+    Serial.println(">> Error: Light Sensor not Activated");
+    return 0;
+  }
 }
 
 uint16_t CodeCell::Light_WhiteRead() {
-  uint16_t value = 0;
-  Wire.beginTransmission(VCNL4040_ADDRESS);
-  Wire.write(VCNL4040_WHITE_REG);
-  Wire.endTransmission(false); /*Don't release the bus*/
-  I2CRead(VCNL4040_ADDRESS, _i2c_read_array, 2);
-  Wire.endTransmission();
-  value = _i2c_read_array[0];         /*LSB*/
-  value |= (_i2c_read_array[1] << 8); /*MSB*/
-  return value;
+  if ((_msense & LIGHT) == LIGHT) {
+    return _light_data[1];
+  } else {
+    Serial.println(">> Error: Light Sensor not Activated");
+    return 0;
+  }
 }
 
 uint16_t CodeCell::Light_ProximityRead() {
+  if ((_msense & LIGHT) == LIGHT) {
+    return _light_data[0];
+  } else {
+    Serial.println(">> Error: Light Sensor not Activated");
+    return 0;
+  }
+}
+
+void CodeCell::Light_Read() {
   uint16_t value = 0;
   Wire.beginTransmission(VCNL4040_ADDRESS);
   Wire.write(VCNL4040_PROX_REG);
   Wire.endTransmission(false); /*Don't release the bus*/
   I2CRead(VCNL4040_ADDRESS, _i2c_read_array, 2);
-  Wire.endTransmission();
+  Wire.endTransmission(false);
   value = _i2c_read_array[0];         /*LSB*/
   value |= (_i2c_read_array[1] << 8); /*MSB*/
-  return value;
-}
+  _light_data[0] = value;
 
-void CodeCell::Motion_AccelerometerRead(float &x, float &y, float &z) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_ACCELEROMETER) {
-    x = Motion.getAccelX();
-    y = Motion.getAccelY();
-    z = Motion.getAccelZ();
-  }
-  Wire.endTransmission();
-}
+  value = 0;
+  Wire.beginTransmission(VCNL4040_ADDRESS);
+  Wire.write(VCNL4040_WHITE_REG);
+  Wire.endTransmission(false); /*Don't release the bus*/
+  I2CRead(VCNL4040_ADDRESS, _i2c_read_array, 2);
+  Wire.endTransmission(false);
+  value = _i2c_read_array[0];         /*LSB*/
+  value |= (_i2c_read_array[1] << 8); /*MSB*/
+  _light_data[1] = value;
 
-void CodeCell::Motion_GyroRead(float &x, float &y, float &z) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_GYROSCOPE_CALIBRATED) {
-    x = Motion.getGyroX();
-    y = Motion.getGyroY();
-    z = Motion.getGyroZ();
-  }
-  Wire.endTransmission();
-}
-
-void CodeCell::Motion_MagnetometerRead(float &x, float &y, float &z) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_MAGNETIC_FIELD) {
-    x = Motion.getMagX();
-    y = Motion.getMagY();
-    z = Motion.getMagZ();
-  }
-  Wire.endTransmission();
-}
-
-void CodeCell::Motion_GravityRead(float &x, float &y, float &z) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_GRAVITY) {
-    x = Motion.getGravityX();
-    y = Motion.getGravityY();
-    z = Motion.getGravityZ();
-  }
-  Wire.endTransmission();
-}
-
-void CodeCell::Motion_LinearAccRead(float &x, float &y, float &z) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_LINEAR_ACCELERATION) {
-    x = Motion.getLinAccelX();
-    y = Motion.getLinAccelY();
-    z = Motion.getLinAccelZ();
-  }
-  Wire.endTransmission();
-}
-
-bool CodeCell::Motion_TapRead() {
-  bool x = false;
-  if (Motion.getSensorEvent() == true) {
-    if (Motion.getSensorEventID() == SENSOR_REPORTID_TAP_DETECTOR) {
-      x = true;
-    }
-  }
-  Wire.endTransmission();
-  return x;
-}
-
-void CodeCell::Motion_StepCounterRead(uint16_t &x) {
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_STEP_COUNTER) {
-    x = (uint16_t)Motion.getStepCount();
-  }
-  Wire.endTransmission();
-}
-
-uint16_t CodeCell::Motion_StateRead() {
-  uint16_t x = 0;
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_STABILITY_CLASSIFIER) {
-    x = Motion.getStabilityClassifier();
-  }
-  Wire.endTransmission();
-  return x;
-}
-
-uint16_t CodeCell::Motion_ActivityRead() {
-  uint16_t x = 0;
-  //Motion_Read();
-  Wire.beginTransmission(BNO085_ADDRESS);
-  if (Motion.getSensorEvent() == true) {
-    if (Motion.getSensorEventID() == SENSOR_REPORTID_PERSONAL_ACTIVITY_CLASSIFIER) {
-      x = Motion.getActivityClassifier();
-    }
-  }
-  Wire.endTransmission();
-  return x;
+  value = 0;
+  Wire.beginTransmission(VCNL4040_ADDRESS);
+  Wire.write(VCNL4040_AMBIENT_REG);
+  Wire.endTransmission(false); /*Don't release the bus*/
+  I2CRead(VCNL4040_ADDRESS, _i2c_read_array, 2);
+  Wire.endTransmission(false);
+  value = _i2c_read_array[0];         /*LSB*/
+  value |= (_i2c_read_array[1] << 8); /*MSB*/
+  _light_data[2] = value;
 }
 
 
 void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0;
-  float Ri = 0;
-  float Rj = 0;
-  float Rk = 0;
-
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
-    Rr = Motion.getRot_R();
-    Ri = Motion.getRot_I();
-    Rj = Motion.getRot_J();
-    Rk = Motion.getRot_K();
-
-    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG;  /* ROLL */
-    pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
-    yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
+  if ((_msense & MOTION_ROTATION) == MOTION_ROTATION) {
+    roll = atan2(2.0 * (_motion_data[0] * _motion_data[1] + _motion_data[2] * _motion_data[3]), 1.0 - 2.0 * (_motion_data[1] * _motion_data[1] + _motion_data[2] * _motion_data[2]));
+    roll = roll * RAD_TO_DEG;
+    pitch = atan2(2.0 * (_motion_data[0] * _motion_data[2] - _motion_data[3] * _motion_data[1]), 1.0 - 2.0 * (_motion_data[2] * _motion_data[2] + _motion_data[1] * _motion_data[1]));
+    pitch = pitch * RAD_TO_DEG;
+    yaw = atan2(2.0 * (_motion_data[0] * _motion_data[3] + _motion_data[1] * _motion_data[2]), 1.0 - 2.0 * (_motion_data[2] * _motion_data[2] + _motion_data[3] * _motion_data[3]));
+    yaw = yaw * RAD_TO_DEG;
+  } else {
+    Serial.println(">> Error: Motion Rotation Sensor not Activated");
   }
-  Wire.endTransmission();
 }
-
 void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
-  float Rr = 0;
-  float Ri = 0;
-  float Rj = 0;
-  float Rk = 0;
-
-  Motion_Read();
-  if (Motion.getSensorEventID() == SENSOR_REPORTID_GAME_ROTATION_VECTOR) {
-    Rr = Motion.getGameReal();
-    Ri = Motion.getGameI();
-    Rj = Motion.getGameJ();
-    Rk = Motion.getGameK();
-
-    roll = atan2(2.0 * (Rr * Ri + Rj * Rk), 1.0 - 2.0 * (Ri * Ri + Rj * Rj)) * RAD_TO_DEG;  /* ROLL */
-    pitch = atan2(2.0 * (Rr * Rj - Rk * Ri), 1.0 - 2.0 * (Rj * Rj + Ri * Ri)) * RAD_TO_DEG; /* PITCH */
-    yaw = atan2(2.0 * (Rr * Rk + Ri * Rj), 1.0 - 2.0 * (Rj * Rj + Rk * Rk)) * RAD_TO_DEG;   /* YAW */
+  if ((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG) {
+    roll = atan2(2.0 * (_motion_data[4] * _motion_data[5] + _motion_data[6] * _motion_data[7]), 1.0 - 2.0 * (_motion_data[5] * _motion_data[5] + _motion_data[6] * _motion_data[6]));
+    roll = roll * RAD_TO_DEG;
+    pitch = atan2(2.0 * (_motion_data[4] * _motion_data[6] - _motion_data[7] * _motion_data[5]), 1.0 - 2.0 * (_motion_data[6] * _motion_data[6] + _motion_data[5] * _motion_data[5]));
+    pitch = pitch * RAD_TO_DEG;
+    yaw = atan2(2.0 * (_motion_data[4] * _motion_data[7] + _motion_data[5] * _motion_data[6]), 1.0 - 2.0 * (_motion_data[6] * _motion_data[6] + _motion_data[7] * _motion_data[7]));
+    yaw = yaw * RAD_TO_DEG;
+  } else {
+    Serial.println(">> Error: Motion Rotation (No Magnetometer) Sensor not Activated");
   }
-  Wire.endTransmission();
 }
+
+void CodeCell::Motion_AccelerometerRead(float &x, float &y, float &z) {
+  if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
+    x = _motion_data[8];
+    y = _motion_data[9];
+    z = _motion_data[10];
+  } else {
+    Serial.println(">> Error: Motion Accelerometer Sensor not Activated");
+  }
+}
+
+void CodeCell::Motion_GyroRead(float &x, float &y, float &z) {
+  if ((_msense & MOTION_GYRO) == MOTION_GYRO) {
+    x = _motion_data[11];
+    y = _motion_data[12];
+    z = _motion_data[13];
+  } else {
+    Serial.println(">> Error: Motion Gyroscope Sensor not Activated");
+  }
+}
+
+void CodeCell::Motion_MagnetometerRead(float &x, float &y, float &z) {
+  if ((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER) {
+    x = _motion_data[14];
+    y = _motion_data[15];
+    z = _motion_data[16];
+  } else {
+    Serial.println(">> Error: Motion Magnetometer Sensor not Activated");
+  }
+}
+
+void CodeCell::Motion_GravityRead(float &x, float &y, float &z) {
+  if ((_msense & MOTION_GRAVITY) == MOTION_GRAVITY) {
+    x = _motion_data[17];
+    y = _motion_data[18];
+    z = _motion_data[19];
+  } else {
+    Serial.println(">> Error: Motion Gravity Sensor not Activated");
+  }
+}
+
+void CodeCell::Motion_LinearAccRead(float &x, float &y, float &z) {
+  if ((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC) {
+    x = _motion_data[20];
+    y = _motion_data[21];
+    z = _motion_data[22];
+  } else {
+    Serial.println(">> Error: Motion Linear Acceleration Sensor not Activated");
+  }
+}
+
+bool CodeCell::Motion_TapRead() {
+  if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
+    return _tap_data;
+  } else {
+    Serial.println(">> Error: Motion Tap Sensor not Activated");
+  }
+}
+
+uint16_t CodeCell::Motion_StepCounterRead() {
+  if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
+    return _step_data;
+  } else {
+    Serial.println(">> Error: Motion Step Sensor not Activated");
+  }
+}
+
+uint16_t CodeCell::Motion_StateRead() {
+  if ((_msense & MOTION_STATE) == MOTION_STATE) {
+    return _mstate_data;
+  } else {
+    Serial.println(">> Error: Motion State Sensor not Activated");
+  }
+}
+
+uint16_t CodeCell::Motion_ActivityRead() {
+  if ((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY) {
+    return _activity_data;
+  } else {
+    Serial.println(">> Error: Motion Activity Sensor not Activated");
+  }
+}
+
 
 void CodeCell::Motion_Read() {
-  uint16_t imu_read_timer = 0U;
+  bool error_flag = 1;
+  uint8_t imu_read_timer = 0U;
+  _tap_data = false;
+
   Wire.beginTransmission(BNO085_ADDRESS);
-  while (Motion.getSensorEvent() == false) {
-    if (imu_read_timer > 20000U) {
-      Serial.println(">> Error: Motion Sensor not found");
-      Serial.println(">> Reseting");
-      delay(100);
-      esp_restart();
-    } else {
-      imu_read_timer++;
+  while (Motion.getSensorEvent() == true) {
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
+      _motion_data[0] = Motion.getRot_R();
+      _motion_data[1] = Motion.getRot_I();
+      _motion_data[2] = Motion.getRot_J();
+      _motion_data[3] = Motion.getRot_K();
+      error_flag = 0;
     }
-    delayMicroseconds(1);
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_GAME_ROTATION_VECTOR) {
+      _motion_data[4] = Motion.getGameReal();
+      _motion_data[5] = Motion.getGameI();
+      _motion_data[6] = Motion.getGameJ();
+      _motion_data[7] = Motion.getGameK();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_ACCELEROMETER) {
+      _motion_data[8] = Motion.getAccelX();
+      _motion_data[9] = Motion.getAccelY();
+      _motion_data[10] = Motion.getAccelZ();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_GYROSCOPE_CALIBRATED) {
+      _motion_data[11] = Motion.getGyroX();
+      _motion_data[12] = Motion.getGyroY();
+      _motion_data[13] = Motion.getGyroZ();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_MAGNETIC_FIELD) {
+      _motion_data[14] = Motion.getMagX();
+      _motion_data[15] = Motion.getMagY();
+      _motion_data[16] = Motion.getMagZ();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_GRAVITY) {
+      _motion_data[17] = Motion.getGravityX();
+      _motion_data[18] = Motion.getGravityY();
+      _motion_data[19] = Motion.getGravityZ();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_LINEAR_ACCELERATION) {
+      _motion_data[20] = Motion.getLinAccelX();
+      _motion_data[21] = Motion.getLinAccelY();
+      _motion_data[22] = Motion.getLinAccelZ();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_TAP_DETECTOR) {
+      _tap_data = true;
+      error_flag = 0;
+    } else {
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_STEP_COUNTER) {
+      _step_data = (uint16_t)Motion.getStepCount();
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_STABILITY_CLASSIFIER) {
+      _mstate_data = Motion.getStabilityClassifier();
+      error_flag = 0;
+    } else {
+      _mstate_data = 0;
+      error_flag = 0;
+    }
+    if (Motion.getSensorEventID() == SENSOR_REPORTID_PERSONAL_ACTIVITY_CLASSIFIER) {
+      _activity_data = Motion.getActivityClassifier();
+      error_flag = 0;
+    }
+    if (error_flag) {
+      imu_read_timer++;
+      if (imu_read_timer > 20U) {
+        Serial.println(">> Error: Motion Sensor not found");
+        return;
+      }
+    }
   }
+  Wire.endTransmission(false);
 }
 
 bool CodeCell::Light_Init() {
