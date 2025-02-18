@@ -41,7 +41,7 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run(10)) { /*Run every 100ms (10Hz)*/
+  if (myCodeCell.Run(10)) { //Run every 10Hz
     uint16_t ProxRead = (myCodeCell.Light_ProximityRead()) >> 4;  //Get Proximity Value and Divide by 16
     Serial.println(ProxRead);
     esp_err_t result = esp_now_send(receiverMAC, (uint8_t *)&ProxRead, sizeof(ProxRead));
