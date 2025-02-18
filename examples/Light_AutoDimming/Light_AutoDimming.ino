@@ -18,6 +18,8 @@ void setup() {
 void loop() {
     delay(100); // Small delay - You can adjust it accordingly
     
+    myCodeCell.Light_Read(); //Read light sensor data (only needed when Run() not being used)
+    
     // Read white light from the sensor and adjust brightness for 8-bit
     uint16_t brightness = (myCodeCell.Light_WhiteRead()) >> 3; 
     Serial.println(brightness); // Print the brightness value to the serial monitor for debugging.
