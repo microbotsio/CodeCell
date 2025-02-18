@@ -40,14 +40,13 @@ void setup() {
 }
 
 void loop() {
-  if (myCodeCell.Run(10)) {  /*Run every 100ms (10Hz)*/  
-    myCodeCell.Motion_StepCounterRead(step_counter); /*Read if a new Step was made*/
-
-    /*Update Display*/
+  if (myCodeCell.Run(10)) {  //Run every 10Hz 
+    step_counter = myCodeCell.Motion_StepCounterRead(); //Read step counter
+    
     display.clearDisplay();
     display.setCursor(32, 16);  // Start at top-left corner
     display.print(F("Steps: "));
     display.print(step_counter);
-    display.display();    
+    display.display();  //Update Display  
   }
 }
