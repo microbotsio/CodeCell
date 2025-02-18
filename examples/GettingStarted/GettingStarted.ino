@@ -4,8 +4,8 @@ CodeCell myCodeCell;
 
 /*
  * Overview:
- * This code shows you how easy it is to set up and run the CodeCell. You just needs to specify which sensors to enable by 
- * passing the appropriate macros to the `Init()` function and use the `Run()` function to handle the power and battery management.
+ * This code shows you how easy it is to set up and run the CodeCell. You just needs to specify which sensors to enable by passing the
+ * appropriate macros to the `Init()` function and use the `Run()` function to handle the CodeCell's sensor and power management
  *
  **** Initialization (`Init` function):
  * 
