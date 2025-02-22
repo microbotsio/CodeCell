@@ -100,11 +100,13 @@ void CodeCell::Init(uint16_t sense_motion) {
   digitalWrite(6, LOW); /*Init Set up to output low*/
   digitalWrite(7, LOW); /*Init Set up to output low*/
 
+  
+    if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
+      Motion_Read();      
+      Motion_Read();
+    }
     if ((_msense & LIGHT) == LIGHT) {
       Light_Read();
-    }
-    if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
-      Motion_Read();
     }
   
   PrintSensors();
