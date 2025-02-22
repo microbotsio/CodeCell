@@ -100,6 +100,13 @@ void CodeCell::Init(uint16_t sense_motion) {
   digitalWrite(6, LOW); /*Init Set up to output low*/
   digitalWrite(7, LOW); /*Init Set up to output low*/
 
+    if ((_msense & LIGHT) == LIGHT) {
+      Light_Read();
+    }
+    if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
+      Motion_Read();
+    }
+  
   PrintSensors();
   cctimer = timerBegin(1000000);            /*Set timer frequency to 1Mhz*/
   timerAttachInterrupt(cctimer, &cc_Timer); /*Attach interrupt*/
