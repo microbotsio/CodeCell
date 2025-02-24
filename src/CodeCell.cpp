@@ -203,14 +203,11 @@ void CodeCell::USBSleep(bool cable_polarity) {
     Serial.println(" | Shutting Down"); /*Shut down but do not go to sleep to allow reprogramming*/
     delay(100);
     while (digitalRead(0) == 0) {
-      delay(1);
+      delay(1);//Wait for battery to charge
     }
-    Serial.println(">> Power Status: Battery is fully charged | Disconnect Cable");
+    Serial.println(">> Power Status: Battery Charged");
     LED(0, LED_SLEEP_BRIGHTNESS, 0); /*Set LED to the minimum brightness Green*/
     delay(1000);
-    while (BatteryRead() > USB_VOLTAGE) {
-      delay(1);
-    }
   } else {
     for (int er = 0; er < 10; er++) {
       LED(255U, 0, 0); /*Set LED to the minimum brightness Red*/
