@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.2.6"
+#define SW_VERSION "1.2.7"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 #define DEVICE_NAME "CodeCell"
