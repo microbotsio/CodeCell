@@ -13,6 +13,7 @@
 #define POWER_USB 1U
 #define POWER_INIT 2U
 #define POWER_BAT_CHRG_FULL 4U
+#define POWER_BAT_CHRG_WAKE 5U
 #define USB_VOLTAGE 4100
 #define MIN_BATTERY_VOLTAGE 3350
 
@@ -59,8 +60,16 @@
 #define MOTION_STATE_MOTION 4
 #define MOTION_STATE_STABLE 3
 
+#define PIN_TYPE_OUTPUT 0
+#define PIN_TYPE_INPUT 1
+#define PIN_TYPE_ADC 2
+#define PIN_TYPE_PWM 3
+#define PWM_RES 8
+#define AVRG_FILTER_SIZE 32U
+
 class CodeCell {
 private:
+  bool pinCheck(uint8_t pin_num, uint8_t pin_type);
   bool _LED_Breathing_flag = 0;
   uint16_t _msense = 0U;
   uint16_t _LED_Breathing_counter = 0U;
@@ -82,6 +91,11 @@ private:
   uint8_t _activity_data = 0;
   uint16_t _light_data[3] = { 0 };
   float _motion_data[23] = { 0.0 };
+  bool _pinArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
+  bool _usb_wake_flag = 0;
+  uint16_t _charge_color = 0;
+  uint8_t _voltage_index = 0;
+  uint16_t _voltage_avrg[AVRG_FILTER_SIZE] = { 0 };
 
 public:
   CodeCell();
@@ -93,6 +107,12 @@ public:
   bool WakeUpCheck();
   bool Run(uint8_t run_frequency);
   uint16_t BatteryRead();
+  void USBChargeState(bool wake_flag);
+
+  void pinWrite(uint8_t pin_num, bool pin_value);
+  bool pinRead(uint8_t pin_num);
+  uint16_t pinADC(uint8_t pin_num);
+  void pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle);
 
   void LED_Breathing(uint32_t rgb_color_24bit);
   void LED(uint8_t r, uint8_t g, uint8_t b);
