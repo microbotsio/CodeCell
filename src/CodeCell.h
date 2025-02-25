@@ -65,7 +65,7 @@
 #define PIN_TYPE_ADC 2
 #define PIN_TYPE_PWM 3
 #define PWM_RES 8
-#define AVRG_FILTER_SIZE 32U
+#define AVRG_FILTER_SIZE 8U
 
 class CodeCell {
 private:
