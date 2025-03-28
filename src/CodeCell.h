@@ -4,22 +4,23 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.2.7"
+#define SW_VERSION "1.2.8"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 #define DEVICE_NAME "CodeCell"
 
-#define POWER_BAT_CHRG 0U
+#define POWER_BAT_RUN 0U
 #define POWER_USB 1U
 #define POWER_INIT 2U
-#define POWER_BAT_CHRG_FULL 4U
-#define POWER_BAT_CHRG_WAKE 5U
+#define POWER_BAT_LOW 3U
+#define POWER_BAT_FULL 4U
+#define POWER_BAT_CHRG 5U
 #define USB_VOLTAGE 4100
 #define MIN_BATTERY_VOLTAGE 3350
 
 #define LED_PIN 10U
 #define LED_DEFAULT_BRIGHTNESS 7U
-#define LED_SLEEP_BRIGHTNESS 3U
+#define LED_SLEEP_BRIGHTNESS 1U
 
 #define LED_COLOR_RED 0XFF0000U
 #define LED_COLOR_ORANGE 0XC04000U
@@ -29,6 +30,7 @@
 #define LED_COLOR_PINK 0XC00020U
 #define LED_COLOR_BLUE 0X0000FFU
 #define LED_COLOR_WHITE 0XFFFFFFU
+#define LED_OFF 0U
 
 #define LIGHT 0b1000000000000
 #define VCNL4040_ADDRESS 0x60
@@ -93,21 +95,21 @@ private:
   float _motion_data[23] = { 0.0 };
   bool _pinArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
   bool _usb_wake_flag = 0;
-  uint16_t _charge_color = 0;
+  uint32_t _charge_color = 0;
   uint8_t _voltage_index = 0;
   uint16_t _voltage_avrg[AVRG_FILTER_SIZE] = { 0 };
+  uint16_t _LED_level = LED_DEFAULT_BRIGHTNESS;
 
 public:
   CodeCell();
   void Init(uint16_t sense_motion);
   void PrintSensors();
   void Test();
-  void USBSleep(bool cable_polarity);
+  void GoToSleep();
   void Sleep(uint16_t sleep_sec);
   bool WakeUpCheck();
   bool Run(uint8_t run_frequency);
   uint16_t BatteryRead();
-  void USBChargeState(bool wake_flag);
 
   void pinWrite(uint8_t pin_num, bool pin_value);
   bool pinRead(uint8_t pin_num);
@@ -137,6 +139,8 @@ public:
   uint16_t Motion_StateRead();
   uint16_t Motion_ActivityRead();
   uint16_t Motion_StepCounterRead();
+  uint8_t PowerState_Read();
+  void Set_LEDBrightness(uint16_t level);
 };
 
 #endif
