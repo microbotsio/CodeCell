@@ -122,7 +122,7 @@ void CodeCell::Init(uint16_t sense_motion) {
   } else if (battery_voltage < MIN_BATTERY_VOLTAGE) {
     Serial.println(">> Error: Battery Volotage");
     _chrg_counter = 0;
-    USBSleep(0);
+    GoToSleep();
   } else {
     _charge_color = LED_COLOR_BLUE;
   }
@@ -207,11 +207,11 @@ void CodeCell::Sleep(uint16_t sleep_sec) {
   esp_deep_sleep_start();
 }
 
-void CodeCell::USBChargeState(bool wake_flag) {
-  _usb_wake_flag = wake_flag;
+uint8_t CodeCell::PowerState_Read() {
+  return _charge_state;
 }
 
-void CodeCell::USBSleep(bool cable_polarity) {
+void CodeCell::GoToSleep() {
   pinMode(1, INPUT);
   pinMode(2, INPUT);
   pinMode(3, INPUT);
@@ -219,71 +219,45 @@ void CodeCell::USBSleep(bool cable_polarity) {
   pinMode(6, INPUT);
   pinMode(7, INPUT);
 
-  if (cable_polarity) {
-    if (_usb_wake_flag) {
-      //Do not shut down
-    } else {
-      Serial.println(" | Shutting Down");  //Shut down but do not go to sleep to allow reprogramming
-      delay(100);
-      while (digitalRead(0) == 0) {
-        delay(1);
-      }
-      LED(0, LED_SLEEP_BRIGHTNESS, 0);  //Set LED to the Green to indicate charging is complete
-      Serial.println(">> Power Status: Battery Charged ");
-      while (BatteryRead() > USB_VOLTAGE) {
-        delay(1);  //Wait for cable to get disconnected
-      }
-    }
-  } else {
-    for (int er = 0; er < 10; er++) {
-      LED(255U, 0, 0); /*Set LED to the minimum brightness Red*/
-      delay(1000);
-      LED(0, 0, 0); /*Set LED to the minimum brightness Red*/
-      delay(1000);
-      if (digitalRead(0) == 0) {
-        /*USB Connected stop blink & Reset*/
-        return;
-      }
-    }
+  LED(0, 0, 0); /*Turn off LED*/
 
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_MS_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x800 & 0xFF);           /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x800 >> 8) & 0xFF);    /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      Serial.println(">> Error: Light Sensor not found");
-    }
-    _i2c_write_size = 0;
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_ALS_CONF_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);         /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);  /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      Serial.println(">> Error: Light Sensor not found");
-    }
-    _i2c_write_size = 0;
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF1_2_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);           /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);    /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      Serial.println(">> Error: Light Sensor not found");
-    }
-    _i2c_write_size = 0;
-
-    if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
-      Motion.modeSleep();
-    }
-    delay(1000);
-
-    digitalWrite(10, LOW);
-    pinMode(10, INPUT);
-    Wire.end();  // Stop I2C
-
-    pinMode(8, INPUT);
-    pinMode(9, INPUT);
-
-    esp_deep_sleep_enable_gpio_wakeup(1 << 0, ESP_GPIO_WAKEUP_GPIO_LOW); /*Set Gpio0 as wakeup pin*/
-    esp_deep_sleep_start();
-    /*Waiting to wake up*/
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_MS_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x800 & 0xFF);           /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x800 >> 8) & 0xFF);    /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    Serial.println(">> Error: Light Sensor not found");
   }
+  _i2c_write_size = 0;
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_ALS_CONF_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);         /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);  /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    Serial.println(">> Error: Light Sensor not found");
+  }
+  _i2c_write_size = 0;
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF1_2_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);           /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);    /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    Serial.println(">> Error: Light Sensor not found");
+  }
+  _i2c_write_size = 0;
+
+  if ((_msense & 0b0111111111111) != MOTION_DISABLE) {
+    Motion.modeSleep();
+  }
+  delay(1000);
+
+  digitalWrite(10, LOW);
+  pinMode(10, INPUT);
+  Wire.end();  // Stop I2C
+
+  pinMode(8, INPUT);
+  pinMode(9, INPUT);
+
+  esp_deep_sleep_enable_gpio_wakeup(1 << 0, ESP_GPIO_WAKEUP_GPIO_LOW); /*Set Gpio0 as wakeup pin*/
+  esp_deep_sleep_start();
+  /*Waiting to wake up*/
 }
 
 void CodeCell::PrintSensors() {
@@ -452,17 +426,19 @@ bool CodeCell::Run(uint8_t run_frequency) {
         _lowvoltage_counter = 0;
         _chrg_counter = 0;
         if (digitalRead(0) == 0) {
-          if (!_usb_wake_flag) {
-            Serial.print(">> Power Status: Battery is charging");
+          if (_charge_state != POWER_BAT_CHRG) {
+            _charge_state = POWER_BAT_CHRG;
+            _charge_color = LED_OFF;
             LED(0, 0, LED_SLEEP_BRIGHTNESS); /*Set LED to the minimum Blue*/
-          } else {
-            if (_charge_state != POWER_BAT_CHRG_FULL) {
-              Serial.println(">> Power Status: Battery is charging | Application running in the background – Green LED remains off");
-              _charge_color = LED_COLOR_BLUE;
-            }
+            Serial.println(">> Power Status: Battery is charging");
           }
-          USBSleep(1);
-          _charge_state = POWER_BAT_CHRG_FULL;
+        } else if ((BatteryRead() > USB_VOLTAGE) && ((_charge_state == POWER_BAT_CHRG) || (_charge_state == POWER_BAT_FULL))) {
+          if (_charge_state != POWER_BAT_FULL) {
+            _charge_state = POWER_BAT_FULL;
+            _charge_color = LED_OFF;
+            LED(0, LED_SLEEP_BRIGHTNESS, 0);  //Set LED to the Green to indicate charging is complete
+            Serial.println(">> Power Status: Battery Charged ");
+          }
         } else if (_charge_state == POWER_INIT) {
           /*Battery First Time Check*/
           Serial.println(">> Power Status: Running from USB Power");
@@ -480,22 +456,24 @@ bool CodeCell::Run(uint8_t run_frequency) {
           }
         }
       } else {
-        if ((_charge_state == POWER_BAT_CHRG_FULL) || (_charge_state == POWER_INIT)) {
+        if ((_charge_state == POWER_BAT_FULL) || (_charge_state == POWER_INIT)) {
           /*Battery has been charged or USB is disconnected*/
           Serial.println(">> Power Status: Running from Battery Power");
-          _charge_state = POWER_BAT_CHRG; /*Battery is at an operating voltage level*/
+          _charge_state = POWER_BAT_RUN; /*Battery is at an operating voltage level*/
           _chrg_counter = 0;
           _lowvoltage_counter = 0;
           _charge_color = LED_COLOR_GREEN;
         } else {
           if (battery_voltage < MIN_BATTERY_VOLTAGE) {
             /*Voltage is less than 3.3V or higher than 4.3V*/
+            _charge_state = POWER_BAT_LOW;
+            _charge_color = LED_COLOR_RED;
             if (_lowvoltage_counter < 10) {
               _lowvoltage_counter++;
             } else {
-              Serial.println(">> Power Status: Battery Low");
+              Serial.println(">> Power Status: Battery Low going to Sleep");
               _chrg_counter = 0;
-              USBSleep(0);
+              GoToSleep();
             }
           } else {
             _lowvoltage_counter = 0;
@@ -503,7 +481,7 @@ bool CodeCell::Run(uint8_t run_frequency) {
             if (_chrg_counter < 3) {
               _chrg_counter++;
             } else {
-              _charge_state = POWER_BAT_CHRG; /*Battery is at an operating voltage level*/
+              _charge_state = POWER_BAT_RUN; /*Battery is at an operating voltage level*/
             }
           }
         }
@@ -519,54 +497,75 @@ void CodeCell::LED(uint8_t r, uint8_t g, uint8_t b) {
   neopixelWrite(LED_PIN, r, g, b); /*RMT ESP32 function for addressable LEDs*/
 }
 
+void CodeCell::Set_LEDBrightness(uint16_t level) {
+  //Brightness level between 1-10
+  if (level == 0) {
+    _LED_level = 0;
+  } else {
+    if (level > 10) {
+      level = 10;
+    }
+    _LED_level = 11 - level;
+  }
+}
+
 void CodeCell::LED_Breathing(uint32_t rgb_color_24bit) {
-  uint32_t r_counter = (rgb_color_24bit >> 16) & 0xFFU;
-  uint32_t g_counter = (rgb_color_24bit >> 8) & 0xFFU;
-  uint32_t b_counter = rgb_color_24bit & 0xFFU;
-  uint16_t getProx = 100;
-
-  if ((_msense & LIGHT) == LIGHT) {
-    getProx = Light_ProximityRead();
-  }
-
-  if (getProx > 2000U) {
-    getProx = 2000U;
-  }
-
-  getProx = (getProx / 100) + 2;
-  if (getProx > LED_DEFAULT_BRIGHTNESS) {
-    getProx = LED_DEFAULT_BRIGHTNESS;
-  }
-  getProx = getProx << 1U;
-
-  if (_run_frequency_last >= 6) {
-    if (_LED_Breathing_flag == 1) {
-      if (_LED_Breathing_counter <= getProx) {
-        _LED_Breathing_counter++;
-      } else {
-        _LED_Breathing_flag = 0;
+  if (_LED_level != 0) {
+    if (rgb_color_24bit != LED_OFF) {
+      uint32_t r_counter = (rgb_color_24bit >> 16) & 0xFFU;
+      uint32_t g_counter = (rgb_color_24bit >> 8) & 0xFFU;
+      uint32_t b_counter = rgb_color_24bit & 0xFFU;
+      uint16_t getProx = 100;
+      if ((_msense & LIGHT) == LIGHT) {
+        getProx = Light_ProximityRead();
       }
-    } else {
-      if (_LED_Breathing_counter >= 1) {
-        _LED_Breathing_counter--;
-      } else {
-        _LED_Breathing_flag = 1;
+
+      if (getProx > 2000U) {
+        getProx = 2000U;
       }
+
+      getProx = (getProx / 100) + 2;
+      if (getProx > LED_DEFAULT_BRIGHTNESS) {
+        getProx = LED_DEFAULT_BRIGHTNESS;
+      }
+      getProx = getProx << 1U;
+
+      if (_run_frequency_last >= 6) {
+        if (_LED_Breathing_flag == 1) {
+          if (_LED_Breathing_counter <= getProx) {
+            _LED_Breathing_counter++;
+          } else {
+            _LED_Breathing_flag = 0;
+          }
+        } else {
+          if (_LED_Breathing_counter >= 1) {
+            _LED_Breathing_counter--;
+          } else {
+            _LED_Breathing_flag = 1;
+          }
+        }
+      } else {
+        _LED_Breathing_flag = !_LED_Breathing_flag;
+        if (_LED_Breathing_flag == 1) {
+          _LED_Breathing_counter = getProx;
+        } else {
+          _LED_Breathing_counter = 0;
+        }
+      }
+
+      r_counter = (r_counter * _LED_Breathing_counter) / 22U;
+      g_counter = (g_counter * _LED_Breathing_counter) / 22U;
+      b_counter = (b_counter * _LED_Breathing_counter) / 22U;
+
+      r_counter = r_counter / _LED_level;
+      g_counter = g_counter / _LED_level;
+      b_counter = b_counter / _LED_level;
+
+      LED(r_counter, g_counter, b_counter); /*Set LED to the default Blue*/
     }
   } else {
-    _LED_Breathing_flag = !_LED_Breathing_flag;
-    if (_LED_Breathing_flag == 1) {
-      _LED_Breathing_counter = getProx;
-    } else {
-      _LED_Breathing_counter = 0;
-    }
+    LED(0, 0, 0); /*Keep LED off*/
   }
-
-  r_counter = (r_counter * _LED_Breathing_counter) / 22U;
-  g_counter = (g_counter * _LED_Breathing_counter) / 22U;
-  b_counter = (b_counter * _LED_Breathing_counter) / 22U;
-
-  LED(r_counter, g_counter, b_counter); /*Set LED to the default Blue*/
 }
 
 uint16_t CodeCell::Light_AmbientRead() {
@@ -822,44 +821,57 @@ void CodeCell::Motion_Read() {
 
 bool CodeCell::Light_Init() {
   bool light_error = 0;
+  uint8_t error_timer = 0;
 
   Wire.begin(8, 9, 400000);  // SDA on GPIO8, SCL on GPIO9, 400kHz speed
 
   Wire.beginTransmission(VCNL4040_ADDRESS);
   if (Wire.endTransmission() != 0) {
-    LED(LED_SLEEP_BRIGHTNESS, 0, 0);
-    Serial.println();
-    Serial.println(">> Error: Light Sensor not found - Check Hardware");
-    while (1) {
-      //Wait
+    while (error_timer < 100) {
+      delay(10);
+      Wire.beginTransmission(VCNL4040_ADDRESS);
+      if (Wire.endTransmission() != 0) {
+        error_timer++;
+        if (error_timer <= 99) {
+          LED(LED_SLEEP_BRIGHTNESS, 0, 0);
+          Serial.println();
+          Serial.println(">> Error: Light Sensor not found - Check Hardware");
+          while (1) {
+            delay(10);  //Wait
+          }
+        }
+      } else {
+        error_timer = 200;
+      }
     }
-  } else {
-    /*Configure - Continuous conversion mode, high dynamic range, integration time of 80 ms*/
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_ALS_CONF_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x000 & 0xFF);        /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x000 >> 8) & 0xFF); /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      light_error = 1;
-    }
-    _i2c_write_size = 0;
-    /*Configure - duty cycle to 1/40, 16-bit resolution*/
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF1_2_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x80E & 0xFF);          /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x80E >> 8) & 0xFF);   /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      light_error = 1;
-    }
-    _i2c_write_size = 0;
-    /*Configure - Set LED current to 200 mA, No interrupt settings*/
-    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_MS_REG; /*Address*/
-    _i2c_write_array[_i2c_write_size++] = (0x4710 & 0xFF);          /*LSB*/
-    _i2c_write_array[_i2c_write_size++] = ((0x4710 >> 8) & 0xFF);   /*MSB*/
-    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
-      light_error = 1;
-    }
-    _i2c_write_size = 0;
-    Wire.endTransmission();
   }
+
+  /*Configure - Continuous conversion mode, high dynamic range, integration time of 80 ms*/
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_ALS_CONF_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x000 & 0xFF);        /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x000 >> 8) & 0xFF); /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    light_error = 1;
+  }
+  _i2c_write_size = 0;
+  /*Configure - duty cycle to 1/40, 16-bit resolution*/
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF1_2_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x80E & 0xFF);          /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x80E >> 8) & 0xFF);   /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    light_error = 1;
+  }
+  _i2c_write_size = 0;
+  /*Configure - Set LED current to 200 mA, No interrupt settings*/
+  _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_MS_REG; /*Address*/
+  _i2c_write_array[_i2c_write_size++] = (0x4710 & 0xFF);          /*LSB*/
+  _i2c_write_array[_i2c_write_size++] = ((0x4710 >> 8) & 0xFF);   /*MSB*/
+  if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+    light_error = 1;
+  }
+  _i2c_write_size = 0;
+  Wire.endTransmission();
+
 
   return light_error;
 }
@@ -882,106 +894,118 @@ void CodeCell::LightReset() {
 void CodeCell::Motion_Init() {
   uint8_t imu_timer = 0U;
   Wire.begin(8, 9, 400000);  // SDA on GPIO8, SCL on GPIO9, 400kHz speed
+  uint8_t error_timer = 0;
 
   Wire.beginTransmission(BNO085_ADDRESS);
   if (Wire.endTransmission() != 0) {
-    LED(LED_SLEEP_BRIGHTNESS, 0, 0);
-    Serial.println();
-    Serial.println(">> Error: Motion Sensor not found - Check Hardware");
-    while (1) {
-      //Wait
-    }
-  } else {
-    while (Motion.begin() == false) {
-      if (imu_timer > 100U) {
-        Serial.println(">> Error: Motion Sensor not found");
-        return;
-      } else {
-        imu_timer++;
-      }
+    while (error_timer < 100) {
       delay(10);
-      Motion.softReset();
-    }
-    if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
-      if (Motion.enableAccelerometer() == true) {
-        Serial.print("Accelerometer Activated | ");
+      Wire.beginTransmission(BNO085_ADDRESS);
+      if (Wire.endTransmission() != 0) {
+        error_timer++;
+        if (error_timer <= 99) {
+          LED(LED_SLEEP_BRIGHTNESS, 0, 0);
+          Serial.println();
+          Serial.println(">> Error: Motion Sensor not found - Check Hardware");
+          while (1) {
+            delay(10);  //Wait
+          }
+        }
       } else {
-        Serial.print("Accelerometer: Failed | ");
+        error_timer = 200;
       }
     }
-    if ((_msense & MOTION_GYRO) == MOTION_GYRO) {
-      if (Motion.enableGyro() == true) {
-        Serial.print("Gyro Activated | ");
-      } else {
-        Serial.print("Gyro: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER) {
-      if (Motion.enableMagnetometer() == true) {
-        Serial.print("Magnetometer Activated | ");
-      } else {
-        Serial.print("Magnetometer: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC) {
-      if (Motion.enableLinearAccelerometer() == true) {
-        Serial.print("Linear Accelerometer Activated | ");
-      } else {
-        Serial.print("Linear Accelerometer Motion: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_GRAVITY) == MOTION_GRAVITY) {
-      if (Motion.enableGravity() == true) {
-        Serial.print("Gravity Sensing Activated | ");
-      } else {
-        Serial.print("Gravity Sensing: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_ROTATION) == MOTION_ROTATION) {
-      if (Motion.enableRotationVector() == true) {
-        Serial.print("Rotation Sensing Activated | ");
-      } else {
-        Serial.print("Rotation Sening: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG) {
-      if (Motion.enableGameRotationVector() == true) {
-        Serial.print("Compass-Free Rotation Sensing Activated | ");
-      } else {
-        Serial.print("Compass-Free Rotation Sensing: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
-      if (Motion.enableStepCounter() == true) {
-        Serial.print("Step Counter Activated | ");
-      } else {
-        Serial.print("Step Counter: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
-      if (Motion.enableTapDetector() == true) {
-        Serial.print("Tap Detector Activated | ");
-      } else {
-        Serial.print("Tap Detector: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_STATE) == MOTION_STATE) {
-      if (Motion.enableStabilityClassifier() == true) {
-        Serial.print("Motion State Activated | ");
-      } else {
-        Serial.print("Motion State: Failed | ");
-      }
-    }
-    if ((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY) {
-      if (Motion.enableActivityClassifier(1000, 0x1F) == true) {
-        Serial.print("Motion Activity Activated | ");
-      } else {
-        Serial.print("Motion Activity: Failed | ");
-      }
-    }
-    _i2c_write_size = 0;
-    Wire.endTransmission();
   }
+
+  while (Motion.begin() == false) {
+    if (imu_timer > 100U) {
+      Serial.println(">> Error: Motion Sensor not found");
+      return;
+    } else {
+      imu_timer++;
+    }
+    delay(10);
+    Motion.softReset();
+  }
+  if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
+    if (Motion.enableAccelerometer() == true) {
+      Serial.print("Accelerometer Activated | ");
+    } else {
+      Serial.print("Accelerometer: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_GYRO) == MOTION_GYRO) {
+    if (Motion.enableGyro() == true) {
+      Serial.print("Gyro Activated | ");
+    } else {
+      Serial.print("Gyro: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER) {
+    if (Motion.enableMagnetometer() == true) {
+      Serial.print("Magnetometer Activated | ");
+    } else {
+      Serial.print("Magnetometer: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC) {
+    if (Motion.enableLinearAccelerometer() == true) {
+      Serial.print("Linear Accelerometer Activated | ");
+    } else {
+      Serial.print("Linear Accelerometer Motion: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_GRAVITY) == MOTION_GRAVITY) {
+    if (Motion.enableGravity() == true) {
+      Serial.print("Gravity Sensing Activated | ");
+    } else {
+      Serial.print("Gravity Sensing: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_ROTATION) == MOTION_ROTATION) {
+    if (Motion.enableRotationVector() == true) {
+      Serial.print("Rotation Sensing Activated | ");
+    } else {
+      Serial.print("Rotation Sening: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG) {
+    if (Motion.enableGameRotationVector() == true) {
+      Serial.print("Compass-Free Rotation Sensing Activated | ");
+    } else {
+      Serial.print("Compass-Free Rotation Sensing: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
+    if (Motion.enableStepCounter() == true) {
+      Serial.print("Step Counter Activated | ");
+    } else {
+      Serial.print("Step Counter: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
+    if (Motion.enableTapDetector() == true) {
+      Serial.print("Tap Detector Activated | ");
+    } else {
+      Serial.print("Tap Detector: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_STATE) == MOTION_STATE) {
+    if (Motion.enableStabilityClassifier() == true) {
+      Serial.print("Motion State Activated | ");
+    } else {
+      Serial.print("Motion State: Failed | ");
+    }
+  }
+  if ((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY) {
+    if (Motion.enableActivityClassifier(1000, 0x1F) == true) {
+      Serial.print("Motion Activity Activated | ");
+    } else {
+      Serial.print("Motion Activity: Failed | ");
+    }
+  }
+  _i2c_write_size = 0;
+  Wire.endTransmission();
 }
 
 bool CodeCell::pinCheck(uint8_t pin_num, uint8_t pin_type) {
