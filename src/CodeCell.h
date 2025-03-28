@@ -105,11 +105,12 @@ public:
   void Init(uint16_t sense_motion);
   void PrintSensors();
   void Test();
-  void GoToSleep();
+  void USBSleep();
   void Sleep(uint16_t sleep_sec);
   bool WakeUpCheck();
   bool Run(uint8_t run_frequency);
   uint16_t BatteryRead();
+  uint8_t PowerStateRead();
 
   void pinWrite(uint8_t pin_num, bool pin_value);
   bool pinRead(uint8_t pin_num);
@@ -118,6 +119,7 @@ public:
 
   void LED_Breathing(uint32_t rgb_color_24bit);
   void LED(uint8_t r, uint8_t g, uint8_t b);
+  void LED_SetBrightness(uint16_t level);
 
   bool Light_Init();
   void LightReset();
@@ -139,8 +141,6 @@ public:
   uint16_t Motion_StateRead();
   uint16_t Motion_ActivityRead();
   uint16_t Motion_StepCounterRead();
-  uint8_t PowerState_Read();
-  void Set_LEDBrightness(uint16_t level);
 };
 
 #endif
