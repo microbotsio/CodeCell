@@ -122,7 +122,7 @@ void CodeCell::Init(uint16_t sense_motion) {
   } else if (battery_voltage < MIN_BATTERY_VOLTAGE) {
     Serial.println(">> Error: Battery Volotage");
     _chrg_counter = 0;
-    GoToSleep();
+    USBSleep();
   } else {
     _charge_color = LED_COLOR_BLUE;
   }
@@ -207,11 +207,11 @@ void CodeCell::Sleep(uint16_t sleep_sec) {
   esp_deep_sleep_start();
 }
 
-uint8_t CodeCell::PowerState_Read() {
+uint8_t CodeCell::PowerStateRead() {
   return _charge_state;
 }
 
-void CodeCell::GoToSleep() {
+void CodeCell::USBSleep() {
   pinMode(1, INPUT);
   pinMode(2, INPUT);
   pinMode(3, INPUT);
@@ -473,7 +473,7 @@ bool CodeCell::Run(uint8_t run_frequency) {
             } else {
               Serial.println(">> Power Status: Battery Low going to Sleep");
               _chrg_counter = 0;
-              GoToSleep();
+              USBSleep();
             }
           } else {
             _lowvoltage_counter = 0;
@@ -497,7 +497,7 @@ void CodeCell::LED(uint8_t r, uint8_t g, uint8_t b) {
   neopixelWrite(LED_PIN, r, g, b); /*RMT ESP32 function for addressable LEDs*/
 }
 
-void CodeCell::Set_LEDBrightness(uint16_t level) {
+void CodeCell::LED_SetBrightness(uint16_t level) {
   //Brightness level between 1-10
   if (level == 0) {
     _LED_level = 0;
