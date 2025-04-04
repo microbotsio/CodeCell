@@ -34,14 +34,25 @@ CodeCell myCodeCell;
  * 
  **** Running the Code (`Run` function):
  * 
- * The myCodeCell.Run() function in the loop() reads the date from the sensors with the selected sampling rate and manages the power status. To make it
- * easier to time your projects, it also returns true at the specified sampling frequency, which can be between 10Hz and 100Hz. e.g. Run(10) returns true 
- * every 10Hz, and Run(100) returns true every 100Hz. The power status and sensors are read at this same frequency. This function also handles the onboard 
- * LED to indicate power status. When the battery voltage falls below 3.3V, the LED will blink red 10 times and then enter Sleep Mode until the USB cable 
- * is connected for charging. While charging, the CodeCell will shut down the application, light the LED blue, and wait until the battery is fully charged. 
- * Once fully charged, it will turn Green. Once the cable is disconnected it will start a green breathing-light animation with a speed corresponding to the
- * proximity distance. The LED will shine green when powered by the battery and blue when powered via USB.
- * 
+ **** Run()
+ * The myCodeCell.Run() function in the loop() reads the date from the sensors with the selected sampling rate and manages the power status. 
+ * To make it easier to time your projects, it also returns true at the specified sampling frequency, which can be between 10Hz and 100Hz. e.g. Run(10) 
+ * returns true every 10Hz, and Run(100) returns true every 100Hz. The power status and sensors are read at this same frequency. This function also 
+ * handles the onboard LED to indicate power status. When the battery voltage falls below 3.3V, the LED will blink red 10 times and then enter Sleep Mode
+ * until the USB cable is connected for charging. While charging, the CodeCell will still continue running your application, and light the LED blue. Once 
+ * fully charged, it will turn Green. Once the cable is disconnected it will start a green breathing-light animation with a speed corresponding to the 
+ * proximity distance. The LED will shine green when powered by the battery and blue when powered via USB. 
+
+ **** PowerStateRead()
+ * The power status of the CodeCell can be read using the PowerStateRead() function:
+ *
+ *  - 0 = Running from LiPo Battery Power
+ *  - 1 = Running from USB Power
+ *  - 2 = Power Status is Initializing&nbsp;
+ *  - 3 = LiPo Battery is low
+ *  - 4 = LiPo Battery has fully charged
+ *  - 5 = LiPo Battery is charging
+ *
  **** Reading Sensor Data:
  * 
  * After initializing the sensors, you can use the following functions to read data from them:
