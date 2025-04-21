@@ -4,10 +4,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.2.8"
+#define SW_VERSION "1.2.9"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
-#define DEVICE_NAME "CodeCell"
 
 #define POWER_BAT_RUN 0U
 #define POWER_USB 1U
@@ -73,12 +72,14 @@ class CodeCell {
 private:
   bool pinCheck(uint8_t pin_num, uint8_t pin_type);
   bool _LED_Breathing_flag = 0;
-  uint16_t _msense = 0U;
+  bool _microlink_flag = 0;
+  uint16_t _msense = 0U;  
+  uint16_t _voltage_last = 0U;
   uint16_t _LED_Breathing_counter = 0U;
   uint8_t _chrg_counter = 0U;
   uint8_t _lowvoltage_counter = 0;
   uint8_t _run_frequency_last = 0;
-  uint8_t _power_counter = 0;
+  uint8_t _power_counter = 250;
   uint8_t _charge_state = POWER_INIT;
   uint8_t _i2c_write_array[10] = { 0 };
   uint8_t _i2c_read_array[10] = { 0 };
@@ -109,7 +110,8 @@ public:
   void Sleep(uint16_t sleep_sec);
   bool WakeUpCheck();
   bool Run(uint8_t run_frequency);
-  uint16_t BatteryRead();
+  uint16_t BatteryVoltageRead();
+  uint8_t BatteryLevelRead();
   uint8_t PowerStateRead();
 
   void pinWrite(uint8_t pin_num, bool pin_value);
