@@ -1,13 +1,23 @@
 #include "CodeCell.h"
 #include "BNO085.h"
 
+extern uint8_t rx_joystick_x;
+extern uint8_t rx_joystick_y;
+extern uint8_t slider1;
+extern uint8_t slider2;
+extern uint8_t slider3;
+extern bool ButtonA;
+extern bool ButtonB;
+extern bool ButtonC;
+extern bool ButtonD;
+extern bool ButtonJoystick;
+
 bool serial_flag = 0;
 bool cc_timeflag = 1;
 esp_sleep_wakeup_cause_t cc_wakeup_reason;
 hw_timer_t *cctimer = NULL;
 
 BNO085 Motion;
-
 
 void IRAM_ATTR cc_Timer() {
   cc_timeflag = 1;
@@ -367,7 +377,29 @@ void CodeCell::PrintSensors() {
   Serial.println();
 }
 
-uint16_t CodeCell::BatteryRead() {
+uint8_t CodeCell::BatteryLevelRead() {
+  uint16_t voltage = 0;
+  voltage = ((BatteryVoltageRead() / 8U) - 408U);
+  if (_charge_state == POWER_BAT_CHRG) {
+    _voltage_last = 101;  //Show Charging Icon in MicroLink App
+  } else if (_charge_state == POWER_USB) {
+    _voltage_last = 102;  //Show USB Icon in MicroLink App
+  } else if (_charge_state == POWER_BAT_FULL) {
+    _voltage_last = 100;
+  } else if (_voltage_last <= 1) {
+    _voltage_last = 1;
+  } else if ((voltage <= _voltage_last) && (voltage <= 100)) {
+    _voltage_last = voltage;
+  } else {
+    //Spike Voltage Filter
+  }
+
+  voltage = _voltage_last;
+
+  return (uint8_t)_voltage_last;
+}
+
+uint16_t CodeCell::BatteryVoltageRead() {
   uint32_t voltage_avrg_total = 0;
   double voltage = (double)analogRead(4) * 1.448;  //* 5930 / 4095
 
@@ -417,10 +449,10 @@ bool CodeCell::Run(uint8_t run_frequency) {
     LED_Breathing(_charge_color);
     _power_counter++;
     if (_power_counter >= (run_frequency / 1)) {
-      ///Check Power every 1Hz
+      //Check Power every 1Hz
       _power_counter = 0;
 
-      uint16_t battery_voltage = BatteryRead();
+      uint16_t battery_voltage = BatteryVoltageRead();
 
       if ((battery_voltage > USB_VOLTAGE) || (digitalRead(0) == 0)) {
         _lowvoltage_counter = 0;
@@ -432,7 +464,7 @@ bool CodeCell::Run(uint8_t run_frequency) {
             LED(0, 0, LED_SLEEP_BRIGHTNESS); /*Set LED to the minimum Blue*/
             Serial.println(">> Power Status: Battery is charging");
           }
-        } else if ((BatteryRead() > USB_VOLTAGE) && ((_charge_state == POWER_BAT_CHRG) || (_charge_state == POWER_BAT_FULL))) {
+        } else if ((BatteryVoltageRead() > USB_VOLTAGE) && ((_charge_state == POWER_BAT_CHRG) || (_charge_state == POWER_BAT_FULL))) {
           if (_charge_state != POWER_BAT_FULL) {
             _charge_state = POWER_BAT_FULL;
             _charge_color = LED_OFF;
@@ -741,7 +773,6 @@ void CodeCell::Motion_Read() {
   uint8_t imu_read_timer = 0U;
   _tap_data = false;
 
-  Wire.beginTransmission(BNO085_ADDRESS);
   while (Motion.getSensorEvent() == true) {
     if (Motion.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
       _motion_data[0] = Motion.getRot_R();
@@ -816,7 +847,6 @@ void CodeCell::Motion_Read() {
       }
     }
   }
-  Wire.endTransmission(false);
 }
 
 bool CodeCell::Light_Init() {
@@ -832,7 +862,7 @@ bool CodeCell::Light_Init() {
       Wire.beginTransmission(VCNL4040_ADDRESS);
       if (Wire.endTransmission() != 0) {
         error_timer++;
-        if (error_timer <= 99) {
+        if (error_timer >= 99) {
           LED(LED_SLEEP_BRIGHTNESS, 0, 0);
           Serial.println();
           Serial.println(">> Error: Light Sensor not found - Check Hardware");
@@ -893,39 +923,20 @@ void CodeCell::LightReset() {
 
 void CodeCell::Motion_Init() {
   uint8_t imu_timer = 0U;
-  Wire.begin(8, 9, 400000);  // SDA on GPIO8, SCL on GPIO9, 400kHz speed
   uint8_t error_timer = 0;
+  Wire.begin(8, 9, 400000);  // SDA on GPIO8, SCL on GPIO9, 400kHz speed
 
-  Wire.beginTransmission(BNO085_ADDRESS);
-  if (Wire.endTransmission() != 0) {
-    while (error_timer < 100) {
-      delay(10);
-      Wire.beginTransmission(BNO085_ADDRESS);
-      if (Wire.endTransmission() != 0) {
-        error_timer++;
-        if (error_timer <= 99) {
-          LED(LED_SLEEP_BRIGHTNESS, 0, 0);
-          Serial.println();
-          Serial.println(">> Error: Motion Sensor not found - Check Hardware");
-          while (1) {
-            delay(10);  //Wait
-          }
-        }
-      } else {
-        error_timer = 200;
-      }
+  if (Motion.begin() == false) {
+    Serial.println(">> Error: Motion Sensor not found - Check Hardware");
+    while (1) {
+      delay(10);  //Wait
     }
   }
-
-  while (Motion.begin() == false) {
-    if (imu_timer > 100U) {
-      Serial.println(">> Error: Motion Sensor not found");
-      return;
-    } else {
-      imu_timer++;
+  if (Motion.isConnected() == false) {
+    Serial.println(">> Error: Motion Sensor not found");
+    while (1) {
+      delay(10);  //Wait
     }
-    delay(10);
-    Motion.softReset();
   }
   if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
     if (Motion.enableAccelerometer() == true) {
@@ -1005,7 +1016,6 @@ void CodeCell::Motion_Init() {
     }
   }
   _i2c_write_size = 0;
-  Wire.endTransmission();
 }
 
 bool CodeCell::pinCheck(uint8_t pin_num, uint8_t pin_type) {
@@ -1081,3 +1091,4 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
     //Skip
   }
 }
+
