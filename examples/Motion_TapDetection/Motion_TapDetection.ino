@@ -3,7 +3,7 @@
  * This code demonstrates the CodeCell's Tap Detection feature.
  * In this example, the CodeCell continuously searches for a tap. When one is detected, it shines the LED yellow for 1 second.
  * Feel free to tweak the code with your own creative ideas! 
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-tap-detection
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-tap-detection
  */
 
 #include <CodeCell.h>
