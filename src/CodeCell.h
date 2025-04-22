@@ -71,10 +71,10 @@
 class CodeCell {
 private:
   bool pinCheck(uint8_t pin_num, uint8_t pin_type);
+  bool _pinArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
   bool _LED_Breathing_flag = 0;
-  uint16_t _msense = 0U;  
-  uint16_t _voltage_last = 0U;
-  uint16_t _LED_Breathing_counter = 0U;
+  bool _tap_data = 0;
+
   uint8_t _chrg_counter = 0U;
   uint8_t _lowvoltage_counter = 0;
   uint8_t _run_frequency_last = 0;
@@ -83,22 +83,24 @@ private:
   uint8_t _i2c_write_array[10] = { 0 };
   uint8_t _i2c_read_array[10] = { 0 };
   uint8_t _i2c_write_size = 0;
-  uint16_t xxtemp = 0;
+  uint8_t _voltage_index = 0;
+  uint8_t _mstate_data = 0;
+  uint8_t _activity_data = 0;
+  
+  uint16_t _msense = 0U;  
+  uint16_t _voltage_last = 0U;
+  uint16_t _LED_Breathing_counter = 0U;
+  uint16_t _voltage_avrg[AVRG_FILTER_SIZE] = { 0 };
+  uint16_t _LED_level = LED_DEFAULT_BRIGHTNESS;
+  uint16_t _step_data = 0;
+  uint16_t _light_data[3] = { 0 };
+  
+  uint32_t _charge_color = 0;
+
   float xx = 0;
   float yy = 0;
   float zz = 0;
-  bool _tap_data = 0;
-  uint16_t _step_data = 0;
-  uint8_t _mstate_data = 0;
-  uint8_t _activity_data = 0;
-  uint16_t _light_data[3] = { 0 };
   float _motion_data[23] = { 0.0 };
-  bool _pinArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
-  bool _usb_wake_flag = 0;
-  uint32_t _charge_color = 0;
-  uint8_t _voltage_index = 0;
-  uint16_t _voltage_avrg[AVRG_FILTER_SIZE] = { 0 };
-  uint16_t _LED_level = LED_DEFAULT_BRIGHTNESS;
 
 public:
   CodeCell();
