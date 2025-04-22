@@ -3,7 +3,7 @@
  * This code demonstrates how to configure the CodeCell's ESP32-C3 to be used as a WiFi remote
  * In this example, the CodeCell (Device 1) reads the proximity sensor and sends it to Device 2
  * Feel free to tweak the code with your own creative ideas!
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-wifi-remote
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-wifi-remote
  */
 
 #include <esp_now.h>
