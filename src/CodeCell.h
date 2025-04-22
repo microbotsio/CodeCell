@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.2.9"
+#define SW_VERSION "1.3.0"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -72,7 +72,6 @@ class CodeCell {
 private:
   bool pinCheck(uint8_t pin_num, uint8_t pin_type);
   bool _LED_Breathing_flag = 0;
-  bool _microlink_flag = 0;
   uint16_t _msense = 0U;  
   uint16_t _voltage_last = 0U;
   uint16_t _LED_Breathing_counter = 0U;
