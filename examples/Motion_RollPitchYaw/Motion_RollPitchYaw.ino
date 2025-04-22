@@ -4,6 +4,9 @@
  * In this example, the CodeCell continuously reads the angular rotations 
  * Every 100ms it prints the Roll, Pitch, and Yaw angles on the Serial Monitor
  * Feel free to tweak the code with your own creative ideas!
+ *
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-reading-the-roll-pitch-yaw
+ *
  */
 
 #include <CodeCell.h>
