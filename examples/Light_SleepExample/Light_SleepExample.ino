@@ -3,6 +3,9 @@
  * This code illustrates a CodeCell that wakes-up upon detecting proximity and enters a low-power sleep mode when no proximity is present.
  * During sleep, the CodeCell consumes approximately 750uA and briefly wakes up every second for 100ms to check proximity, consuming around 15mA during this short time.
  * You can modify the code for your specific application needs, or configure it to wake up using a different sensor.
+ *
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-going-to-sleep
+ *
  */
 
 #include <CodeCell.h>
