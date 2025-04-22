@@ -3,7 +3,7 @@
  * In this example we'll explore how to configure the CodeCell's onboard motion sensor to try and guess the personal activate you're doing. a
  * This activity guess will be read every 1000ms and displayed on an OLED display.
  * Feel free to tweak the code with your own creative ideas! 
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-personal-activity-guessing
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-personal-activity-guessing
  */
 
 #include <CodeCell.h>
