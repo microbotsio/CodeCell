@@ -4,7 +4,7 @@
  * With this example the CodeCell controls two FlatFlaps that stops flapping when proximity is detected.
  * Their angle gets adjusted dynamically based on how close something gets.
  * Feel free to tweak the code with your own creative ideas, or add motion sensing for a new reaction! 
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-depth-gestures
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-proximity-sensing
  */
 
 #include <CodeCell.h>
