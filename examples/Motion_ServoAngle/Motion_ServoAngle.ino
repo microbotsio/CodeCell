@@ -3,7 +3,7 @@
  * This code demonstrates the CodeCell's Rotation Sensing features.
  * In this example, the CodeCell continuously reads the angular rotations and use these angles to control a servo motor
  * Feel free to tweak the code with your own creative ideas!
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-servo-angle-control
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-servo-angle-control
  */
 
 #include <CodeCell.h>
