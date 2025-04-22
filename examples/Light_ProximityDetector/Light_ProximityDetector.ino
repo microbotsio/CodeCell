@@ -1,9 +1,9 @@
 /*
  * Overview:
- * This code demonstrates the CodeCell's prximity sensing.
+ * This code demonstrates the CodeCell's proximity sensing.
  * In this example, the CodeCell continuously measures proximity and set the onboard LED to Red when proximity is detected
  * Feel free to tweak the code with your own creative ideas! 
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-proximity-sensing
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-proximity-sensing
  */
 
 #include <CodeCell.h>
