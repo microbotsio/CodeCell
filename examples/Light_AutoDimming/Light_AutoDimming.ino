@@ -3,7 +3,7 @@
  * This code demonstrates the CodeCell's Light Sensor.
  * In this example, the CodeCell continuously measures white light and updates the brightness of the LED according to how dark it gets.
  * The LED will get dimmer as the room gets darker - Feel free to tweak the code with your own creative ideas! 
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-auto-dimming
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-auto-dimming
  */
 
 #include <CodeCell.h>
