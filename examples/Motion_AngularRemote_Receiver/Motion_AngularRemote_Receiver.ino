@@ -4,7 +4,7 @@
  * In this example, we connect two motors with a two DriveCells to this receiver.
  * The CodeCell (Device 2) will receive angular data from Device 1 and adjusts the speed of two motors based on the received data. 
  * Feel free to tweak the code with your own creative ideas!
- * Learn more about this example here - https://microbots.io/blogs/learn/codecell-wifi-remote
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-wifi-remote
  */
  
 #include <esp_now.h>
