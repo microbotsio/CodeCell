@@ -81,6 +81,8 @@ CodeCell myCodeCell;
  * 
  * Note: You can use `myCodeCell.PrintSensors()`to prints the values of all enabled sensors on the Serial Monitor.
  * 
+ * Learn more about other examples here: https://microbots.io/pages/learn-codecell
+ *
  */
 
 void setup() {
