@@ -1,3 +1,12 @@
+/*
+ * Overview:
+ * This code shows how easy it is use to use the CodeCell's GPIO pins 
+ *
+ * Learn more about this example here - https://microbots.io/blogs/codecell/codecell-set-up-a-gpio-in-seconds
+ * - Take it a step further and learn how to read an ADC - https://microbots.io/blogs/codecell/codecell-read-analog-values-with-adc
+ * - Take it a step further and learn how to create a PWM signal - https://microbots.io/blogs/codecell/codecell-set-up-a-pwm-in-seconds
+ */
+
 #include <CodeCell.h>
 
 CodeCell myCodeCell;
