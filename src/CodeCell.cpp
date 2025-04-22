@@ -1,17 +1,6 @@
 #include "CodeCell.h"
 #include "BNO085.h"
 
-extern uint8_t rx_joystick_x;
-extern uint8_t rx_joystick_y;
-extern uint8_t slider1;
-extern uint8_t slider2;
-extern uint8_t slider3;
-extern bool ButtonA;
-extern bool ButtonB;
-extern bool ButtonC;
-extern bool ButtonD;
-extern bool ButtonJoystick;
-
 bool serial_flag = 0;
 bool cc_timeflag = 1;
 esp_sleep_wakeup_cause_t cc_wakeup_reason;
