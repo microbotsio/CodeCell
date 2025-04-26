@@ -729,6 +729,7 @@ bool CodeCell::Motion_TapRead() {
     return _tap_data;
   } else {
     Serial.println(">> Error: Motion Tap Sensor not Activated");
+    return false;
   }
 }
 
@@ -736,7 +737,8 @@ uint16_t CodeCell::Motion_StepCounterRead() {
   if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
     return _step_data;
   } else {
-    Serial.println(">> Error: Motion Step Sensor not Activated");
+    Serial.println(">> Error: Motion Step Sensor not Activated");    
+    return 0;
   }
 }
 
@@ -745,6 +747,7 @@ uint16_t CodeCell::Motion_StateRead() {
     return _mstate_data;
   } else {
     Serial.println(">> Error: Motion State Sensor not Activated");
+    return 0;
   }
 }
 
@@ -753,6 +756,7 @@ uint16_t CodeCell::Motion_ActivityRead() {
     return _activity_data;
   } else {
     Serial.println(">> Error: Motion Activity Sensor not Activated");
+    return 0;
   }
 }
 
