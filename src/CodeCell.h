@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.1"
+#define SW_VERSION "1.3.2"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -88,7 +88,7 @@ private:
   uint8_t _activity_data = 0;
   
   uint16_t _msense = 0U;  
-  uint16_t _voltage_last = 0U;
+  uint16_t _voltage_last = 0xFFU;
   uint16_t _LED_Breathing_counter = 0U;
   uint16_t _voltage_avrg[AVRG_FILTER_SIZE] = { 0 };
   uint16_t _LED_level = LED_DEFAULT_BRIGHTNESS;
