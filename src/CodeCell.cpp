@@ -154,8 +154,10 @@ bool CodeCell::WakeUpCheck() {
   cc_wakeup_reason = wakeup_reason;
 
   if (wakeup_reason == ESP_SLEEP_WAKEUP_TIMER) {
+    _wakeup_flag=1;
     return true;
   } else {
+    _wakeup_flag=0;
     return false;
   }
 }
@@ -590,7 +592,7 @@ void CodeCell::LED_Breathing(uint32_t rgb_color_24bit) {
 }
 
 uint16_t CodeCell::Light_AmbientRead() {
-  if ((_msense & LIGHT) == LIGHT) {
+  if (((_msense & LIGHT) == LIGHT)||(_wakeup_flag == 1)) {
     return _light_data[2];
   } else {
     Serial.println(">> Error: Light Sensor not Activated");
@@ -599,7 +601,7 @@ uint16_t CodeCell::Light_AmbientRead() {
 }
 
 uint16_t CodeCell::Light_WhiteRead() {
-  if ((_msense & LIGHT) == LIGHT) {
+  if (((_msense & LIGHT) == LIGHT)||(_wakeup_flag == 1)) {
     return _light_data[1];
   } else {
     Serial.println(">> Error: Light Sensor not Activated");
@@ -608,7 +610,7 @@ uint16_t CodeCell::Light_WhiteRead() {
 }
 
 uint16_t CodeCell::Light_ProximityRead() {
-  if ((_msense & LIGHT) == LIGHT) {
+  if (((_msense & LIGHT) == LIGHT)||(_wakeup_flag == 1)) {
     return _light_data[0];
   } else {
     Serial.println(">> Error: Light Sensor not Activated");
@@ -650,7 +652,7 @@ void CodeCell::Light_Read() {
 
 
 void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
-  if ((_msense & MOTION_ROTATION) == MOTION_ROTATION) {
+  if (((_msense & MOTION_ROTATION) == MOTION_ROTATION)||(_wakeup_flag == 1)) {
     roll = atan2(2.0 * (_motion_data[0] * _motion_data[1] + _motion_data[2] * _motion_data[3]), 1.0 - 2.0 * (_motion_data[1] * _motion_data[1] + _motion_data[2] * _motion_data[2]));
     roll = roll * RAD_TO_DEG;
     pitch = atan2(2.0 * (_motion_data[0] * _motion_data[2] - _motion_data[3] * _motion_data[1]), 1.0 - 2.0 * (_motion_data[2] * _motion_data[2] + _motion_data[1] * _motion_data[1]));
@@ -662,7 +664,7 @@ void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
   }
 }
 void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
-  if ((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG) {
+  if (((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG)||(_wakeup_flag == 1)) {
     roll = atan2(2.0 * (_motion_data[4] * _motion_data[5] + _motion_data[6] * _motion_data[7]), 1.0 - 2.0 * (_motion_data[5] * _motion_data[5] + _motion_data[6] * _motion_data[6]));
     roll = roll * RAD_TO_DEG;
     pitch = atan2(2.0 * (_motion_data[4] * _motion_data[6] - _motion_data[7] * _motion_data[5]), 1.0 - 2.0 * (_motion_data[6] * _motion_data[6] + _motion_data[5] * _motion_data[5]));
@@ -675,7 +677,7 @@ void CodeCell::Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) {
 }
 
 void CodeCell::Motion_AccelerometerRead(float &x, float &y, float &z) {
-  if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
+  if (((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER)||(_wakeup_flag == 1)) {
     x = _motion_data[8];
     y = _motion_data[9];
     z = _motion_data[10];
@@ -685,7 +687,7 @@ void CodeCell::Motion_AccelerometerRead(float &x, float &y, float &z) {
 }
 
 void CodeCell::Motion_GyroRead(float &x, float &y, float &z) {
-  if ((_msense & MOTION_GYRO) == MOTION_GYRO) {
+  if (((_msense & MOTION_GYRO) == MOTION_GYRO)||(_wakeup_flag == 1)) {
     x = _motion_data[11];
     y = _motion_data[12];
     z = _motion_data[13];
@@ -695,7 +697,7 @@ void CodeCell::Motion_GyroRead(float &x, float &y, float &z) {
 }
 
 void CodeCell::Motion_MagnetometerRead(float &x, float &y, float &z) {
-  if ((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER) {
+  if (((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER)||(_wakeup_flag == 1)) {
     x = _motion_data[14];
     y = _motion_data[15];
     z = _motion_data[16];
@@ -705,7 +707,7 @@ void CodeCell::Motion_MagnetometerRead(float &x, float &y, float &z) {
 }
 
 void CodeCell::Motion_GravityRead(float &x, float &y, float &z) {
-  if ((_msense & MOTION_GRAVITY) == MOTION_GRAVITY) {
+  if (((_msense & MOTION_GRAVITY) == MOTION_GRAVITY)||(_wakeup_flag == 1)) {
     x = _motion_data[17];
     y = _motion_data[18];
     z = _motion_data[19];
@@ -715,7 +717,7 @@ void CodeCell::Motion_GravityRead(float &x, float &y, float &z) {
 }
 
 void CodeCell::Motion_LinearAccRead(float &x, float &y, float &z) {
-  if ((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC) {
+  if (((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC)||(_wakeup_flag == 1)) {
     x = _motion_data[20];
     y = _motion_data[21];
     z = _motion_data[22];
@@ -725,7 +727,7 @@ void CodeCell::Motion_LinearAccRead(float &x, float &y, float &z) {
 }
 
 bool CodeCell::Motion_TapRead() {
-  if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
+  if (((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR)||(_wakeup_flag == 1)) {
     return _tap_data;
   } else {
     Serial.println(">> Error: Motion Tap Sensor not Activated");
@@ -734,7 +736,7 @@ bool CodeCell::Motion_TapRead() {
 }
 
 uint16_t CodeCell::Motion_StepCounterRead() {
-  if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
+  if (((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER)||(_wakeup_flag == 1)) {
     return _step_data;
   } else {
     Serial.println(">> Error: Motion Step Sensor not Activated");    
@@ -743,7 +745,7 @@ uint16_t CodeCell::Motion_StepCounterRead() {
 }
 
 uint16_t CodeCell::Motion_StateRead() {
-  if ((_msense & MOTION_STATE) == MOTION_STATE) {
+  if (((_msense & MOTION_STATE) == MOTION_STATE)||(_wakeup_flag == 1)) {
     return _mstate_data;
   } else {
     Serial.println(">> Error: Motion State Sensor not Activated");
@@ -752,7 +754,7 @@ uint16_t CodeCell::Motion_StateRead() {
 }
 
 uint16_t CodeCell::Motion_ActivityRead() {
-  if ((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY) {
+  if (((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY)||(_wakeup_flag == 1)) {
     return _activity_data;
   } else {
     Serial.println(">> Error: Motion Activity Sensor not Activated");
