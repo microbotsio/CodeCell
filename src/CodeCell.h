@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.2"
+#define SW_VERSION "1.3.3"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -74,6 +74,7 @@ private:
   bool _pinArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
   bool _LED_Breathing_flag = 0;
   bool _tap_data = 0;
+  bool _wakeup_flag = 0;
 
   uint8_t _chrg_counter = 0U;
   uint8_t _lowvoltage_counter = 0;
