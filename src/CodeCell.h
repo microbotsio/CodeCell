@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.3"
+#define SW_VERSION "1.3.4"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -132,7 +132,7 @@ public:
   uint16_t Light_WhiteRead();
   uint16_t Light_AmbientRead();
 
-  void Motion_Init();
+  void Motion_Init(uint16_t sense_motion);
   void Motion_Read();
   void Motion_AccelerometerRead(float &x, float &y, float &z);
   void Motion_GyroRead(float &x, float &y, float &z);
