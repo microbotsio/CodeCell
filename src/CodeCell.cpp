@@ -163,6 +163,9 @@ bool CodeCell::WakeUpCheck() {
 }
 
 void CodeCell::Sleep(uint16_t sleep_sec) {
+  if (!_wakeup_flag) {
+    LED(0, 0, 0);
+  }  
   pinMode(1, INPUT);
   pinMode(2, INPUT);
   pinMode(3, INPUT);
@@ -202,7 +205,6 @@ void CodeCell::Sleep(uint16_t sleep_sec) {
 
   pinMode(8, INPUT);
   pinMode(9, INPUT);
-  LED(0, 0, 0);
 
   esp_sleep_enable_timer_wakeup(sleep_sec * 1000000ULL);
   esp_deep_sleep_start();
