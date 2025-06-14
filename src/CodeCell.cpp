@@ -60,7 +60,7 @@ void CodeCell::Init(uint16_t sense_motion) {
     if ((_msense & LIGHT) == LIGHT) {
       Serial.print(" | ");
     }
-    Motion_Init();
+    Motion_Init(_msense);
   } else {
     //skip
   }
@@ -916,9 +916,11 @@ void CodeCell::LightReset() {
   _i2c_write_size = 0;
 }
 
-void CodeCell::Motion_Init() {
+void CodeCell::Motion_Init(uint16_t sense_motion) {
   uint8_t imu_timer = 0U;
   uint8_t error_timer = 0;
+
+  _msense = sense_motion;
   Wire.begin(8, 9, 400000);  // SDA on GPIO8, SCL on GPIO9, 400kHz speed
 
   if (Motion.begin() == false) {
@@ -935,77 +937,99 @@ void CodeCell::Motion_Init() {
   }
   if ((_msense & MOTION_ACCELEROMETER) == MOTION_ACCELEROMETER) {
     if (Motion.enableAccelerometer() == true) {
-      Serial.print("Accelerometer Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Accelerometer Activated | ");
+      }
     } else {
       Serial.print("Accelerometer: Failed | ");
     }
   }
   if ((_msense & MOTION_GYRO) == MOTION_GYRO) {
     if (Motion.enableGyro() == true) {
-      Serial.print("Gyro Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Gyro Activated | ");
+      }
     } else {
       Serial.print("Gyro: Failed | ");
     }
   }
   if ((_msense & MOTION_MAGNETOMETER) == MOTION_MAGNETOMETER) {
     if (Motion.enableMagnetometer() == true) {
-      Serial.print("Magnetometer Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Magnetometer Activated | ");
+      }
     } else {
       Serial.print("Magnetometer: Failed | ");
     }
   }
   if ((_msense & MOTION_LINEAR_ACC) == MOTION_LINEAR_ACC) {
     if (Motion.enableLinearAccelerometer() == true) {
-      Serial.print("Linear Accelerometer Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Linear Accelerometer Activated | ");
+      }
     } else {
       Serial.print("Linear Accelerometer Motion: Failed | ");
     }
   }
   if ((_msense & MOTION_GRAVITY) == MOTION_GRAVITY) {
     if (Motion.enableGravity() == true) {
-      Serial.print("Gravity Sensing Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Gravity Sensing Activated | ");
+      }
     } else {
       Serial.print("Gravity Sensing: Failed | ");
     }
   }
   if ((_msense & MOTION_ROTATION) == MOTION_ROTATION) {
     if (Motion.enableRotationVector() == true) {
-      Serial.print("Rotation Sensing Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Rotation Sensing Activated | ");
+      }
     } else {
       Serial.print("Rotation Sening: Failed | ");
     }
   }
   if ((_msense & MOTION_ROTATION_NO_MAG) == MOTION_ROTATION_NO_MAG) {
     if (Motion.enableGameRotationVector() == true) {
-      Serial.print("Compass-Free Rotation Sensing Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Compass-Free Rotation Sensing Activated | ");
+      }
     } else {
       Serial.print("Compass-Free Rotation Sensing: Failed | ");
     }
   }
   if ((_msense & MOTION_STEP_COUNTER) == MOTION_STEP_COUNTER) {
     if (Motion.enableStepCounter() == true) {
-      Serial.print("Step Counter Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Step Counter Activated | ");
+      }
     } else {
       Serial.print("Step Counter: Failed | ");
     }
   }
   if ((_msense & MOTION_TAP_DETECTOR) == MOTION_TAP_DETECTOR) {
     if (Motion.enableTapDetector() == true) {
-      Serial.print("Tap Detector Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Tap Detector Activated | ");
+      }
     } else {
       Serial.print("Tap Detector: Failed | ");
     }
   }
   if ((_msense & MOTION_STATE) == MOTION_STATE) {
     if (Motion.enableStabilityClassifier() == true) {
-      Serial.print("Motion State Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Motion State Activated | ");
+      }
     } else {
       Serial.print("Motion State: Failed | ");
     }
   }
   if ((_msense & MOTION_ACTIVITY) == MOTION_ACTIVITY) {
     if (Motion.enableActivityClassifier(1000, 0x1F) == true) {
-      Serial.print("Motion Activity Activated | ");
+      if (!_wakeup_flag) {
+        Serial.print("Motion Activity Activated | ");
+      }
     } else {
       Serial.print("Motion Activity: Failed | ");
     }
@@ -1086,4 +1110,3 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
     //Skip
   }
 }
-
