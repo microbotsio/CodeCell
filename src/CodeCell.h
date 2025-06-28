@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.4"
+#define SW_VERSION "1.3.5"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -14,7 +14,7 @@
 #define POWER_BAT_LOW 3U
 #define POWER_BAT_FULL 4U
 #define POWER_BAT_CHRG 5U
-#define USB_VOLTAGE 4100
+#define USB_VOLTAGE 4180
 #define MIN_BATTERY_VOLTAGE 3350
 
 #define LED_PIN 10U
