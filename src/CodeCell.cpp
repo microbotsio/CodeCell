@@ -652,6 +652,16 @@ void CodeCell::Light_Read() {
   _light_data[2] = value;
 }
 
+void CodeCell::Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float vec_k) {
+  if (((_msense & MOTION_ROTATION) == MOTION_ROTATION)||(_wakeup_flag == 1)) {
+      vec_r = _motion_data[0];
+      vec_i = _motion_data[1];
+      vec_j = _motion_data[2];
+      vec_k = _motion_data[3];
+  } else {
+    Serial.println(">> Error: Motion Rotation Sensor not Activated");
+  }
+}
 
 void CodeCell::Motion_RotationRead(float &roll, float &pitch, float &yaw) {
   if (((_msense & MOTION_ROTATION) == MOTION_ROTATION)||(_wakeup_flag == 1)) {
