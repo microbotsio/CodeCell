@@ -652,7 +652,7 @@ void CodeCell::Light_Read() {
   _light_data[2] = value;
 }
 
-void CodeCell::Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float vec_k) {
+void CodeCell::Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float &vec_k) {
   if (((_msense & MOTION_ROTATION) == MOTION_ROTATION)||(_wakeup_flag == 1)) {
       vec_r = _motion_data[0];
       vec_i = _motion_data[1];
