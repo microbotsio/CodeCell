@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.6"
+#define SW_VERSION "1.3.7"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
