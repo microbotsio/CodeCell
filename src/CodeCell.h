@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define SW_VERSION "1.3.7"
+#define SW_VERSION "1.3.8"
 #define HW_VERSION "1.3"
 #define MANUFACTURER "Microbots"
 
@@ -140,7 +140,7 @@ public:
   void Motion_GravityRead(float &x, float &y, float &z);
   void Motion_LinearAccRead(float &x, float &y, float &z);
   void Motion_RotationRead(float &roll, float &pitch, float &yaw);
-  void Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float vec_k);
+  void Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float &vec_k);
   void Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw);
   bool Motion_TapRead();
   uint16_t Motion_StateRead();
