@@ -33,7 +33,7 @@ void loop() {
         Serial.println("In Motion");
         break;
       default:
-        Serial.println("Unkown");
+        Serial.println("Unknown");
         break;
     }
   }
