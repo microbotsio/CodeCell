@@ -2,11 +2,61 @@
 
 <img src="https://microbots.io/cdn/shop/files/penny_600x.png?v=1719926378" alt="CodeCell" width="300" align="right" style="margin-left: 20px;">
 
-CodeCell is a penny-sized board that helps you miniaturize your DIY robots, wearables, and IoT projects with ease! Designed for all makers, it features an Arduino-friendly ESP32-C3 Wi-Fi & BLE module, programmable through a standard USB-C cable ~ which can also charge a LiPo battery that easily plugs into the onboard connector. That’s not all! We've created a CodeCell library to make it easier to interact with the onboard sensors ~ its Light Sensor can detect darkness and measure proximity up to 20 cm! While the optional Motion Sensor features a 9-axis sensor-fusion IMU to measure angular rotations, step counts, personal activity, tapping, gravity, acceleration, rate of rotation, magnetic fields, and more!
+## About CodeCell
+
+CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease!  
+Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management — all programmable over a standard USB-C cable.  
+The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
+
+All CodeCell modules are supported by the **CodeCell Arduino Library**, which provides simple, ready-to-use functions for light, proximity, motion, and power management.  
+You can even connect your CodeCell to our companion **MicroLink App** to add wireless sliders, buttons, joysticks, real-time sensor data, and a live 20-character display — perfect for debugging or control!
+
+---
+
+### 🔹 Available Versions
+
+| Model | Microcontroller | Features | Typical Use |
+|:------|:----------------|:----------|:-------------|
+| **CodeCell C3 Light** | ESP32-C3-MINI-1-N4 | Light + Proximity Sensor, LiPo Charging via USB-C | Basic sensing and IoT projects |
+| **CodeCell C3** | ESP32-C3-MINI-1-N4 | Light + Proximity Sensor + 9-Axis IMU Motion Sensor | Robotics & Wearables |
+| **CodeCell C6** | ESP32-C6-MINI-1-H8 | Wi-Fi 6 + BLE 5 + Zigbee, Light + Proximity + 9-Axis IMU Sensor | Advanced IoT & Low-Power Applications |
+| **CodeCell C6 Drive** | ESP32-C6-MINI-1-H8 | Dual H-Bridge Motor Drivers + Light + Motion Sensors | All-in-One Robotics Controller |
+
+---
+
+### ✳️ Overview
+
+Each version of CodeCell shares the same compact 1.85 cm (C3/C6) or 2.25 cm (C6 Drive) form factor and includes:
+
+- **USB-C Port** – for programming, serial communication, and battery charging.  
+- **LiPo Connector** – works with the optional 170 mAh 20C battery (1.25 mm pitch).  
+- **BQ24232 Power Management** – enables dynamic power-path control for simultaneous operation and charging.  
+- **Programmable GPIO + I2C Pins** – expand your project with additional sensors, displays, or actuators.  
+- **CodeCell Library Support** – easy Arduino functions for reading sensors, LEDs, PWM, and sleep triggers.  
+- **MicroLink App Integration** – wireless control and real-time feedback from your phone.  
+
+---
+
+### 📦 Included in Every Box
+- CodeCell module (C3 Light / C3 / C6 / C6 Drive)  
+- Four M1.2 screws  
+- Three sets of female headers (optional soldering)  
+- 1.25 mm battery cable  
+- Optional 170 mAh LiPo battery (add-on)
+
+---
+
+### 🧩 Certifications & Standards
+All CodeCell modules are:
+- **FCC**, **CE**, **TELEC**, and **Wi-Fi Alliance** certified (via Espressif modules)  
+- **RoHS compliant**  
+- Built to **IPC-A-600 Class II** standards  
+
+---
 
 ## Getting Started with the CodeCell Library
 
-A full guide to get you started with CodeCell can be found [here](https://microbots.io/pages/learn-codecell).
+Get started and explore tutorials [here](https://microbots.io/pages/learn-codecell).
 
 ---
 
@@ -57,7 +107,7 @@ myCodeCell.Init(LIGHT);                                 // Light only
 myCodeCell.Init(LIGHT + MOTION_ROTATION);               // Light + orientation  
 myCodeCell.Init(LIGHT + MOTION_ROTATION + MOTION_STATE);// Light + orientation + state  
 
-💡 Combine multiple macros using the `+` operator to enable multiple sensors.
+🧠 Combine multiple macros using the `+` operator to enable multiple sensors.
 
 ---
 
@@ -149,13 +199,13 @@ myCodeCell.pinADC(uint8_t pin);                            // Analog read
 
 ---
 
-### 💡 LED Control
+### 💡 Onboard LED Control
 myCodeCell.LED_SetBrightness(0);   // Turn off CodeCell LED  
 myCodeCell.LED_SetBrightness(10);  // Full brightness  
 
 ---
 
-### 😴 Sleep Functions
+### 💤 Sleep Functions
 myCodeCell.SleepTimer(uint16_t sleep_sec);  
 myCodeCell.SleepProximityTrigger(uint16_t threshold);  // C6 only  
 myCodeCell.SleepLightTrigger(uint16_t threshold);      // C6 only  
@@ -166,7 +216,7 @@ myCodeCell.SleepTapTrigger();                          // C6 only
 
 ### 📱 MicroLink App Integration
 - Download the MicroLink library to connect the CodeCell with the companion smartphone app.  
-- Enables wireless sensor streaming, joystick control, and firmware communication.  
+- Enables wireless sensor reading, joystick control, buttons and sliders.  
 
 ---
 
