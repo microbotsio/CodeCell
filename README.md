@@ -37,13 +37,6 @@ Available Versions:
 - Optional 170 mAh LiPo battery (add-on)
 
 ---
-## Certifications & Standards
-All modules are:
-- **FCC**, **CE**, **TELEC**, and **Wi-Fi Alliance** certified (via Espressif modules)  
-- **RoHS compliant**  
-- Built to **IPC-A-600 Class II** standards  
-
----
 
 ## Getting Started with the CodeCell Library
 
