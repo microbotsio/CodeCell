@@ -2,7 +2,7 @@
 
 <img src="https://microbots.io/cdn/shop/files/penny_600x.png?v=1719926378" alt="CodeCell" width="300" align="right" style="margin-left: 20px;">
 
-## ⚙️ Overview
+## Overview
 
 CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease!  
 Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management - all programmable over a standard USB-C cable. The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
@@ -36,7 +36,8 @@ Available Versions:
 - 1.25 mm battery cable  
 - Optional 170 mAh LiPo battery (add-on)
 
-### 🧩 Certifications & Standards
+---
+## Certifications & Standards
 All modules are:
 - **FCC**, **CE**, **TELEC**, and **Wi-Fi Alliance** certified (via Espressif modules)  
 - **RoHS compliant**  
