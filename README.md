@@ -15,9 +15,10 @@ Each version of CodeCell shares the same compact 1.85 cm (C3/C6) or 2.25 cm (C6 
 - **USB-C Port** – for programming, serial communication, and battery charging.  
 - **LiPo Connector** – works with the included cable and the optional 170 mAh 20C battery (1.25 mm pitch).  
 - **BQ24232 Power Management** – enables dynamic power-path control for simultaneous operation and charging.  
-- **Programmable GPIO/PWM/ADC/I2C Pins** – expand your project with additional sensors, displays, or actuators.  
+- **Programmable GPIO/PWM/ADC/I2C Pins** – expand your project with additional sensors, displays, or actuators.
 - **CodeCell Library Support** – easy Arduino functions for reading sensors, LEDs, PWM, and sleep triggers.  
-- **MicroLink App Integration** – wireless control and real-time feedback from your phone.  
+- **MicroLink App Integration** – wireless control and real-time feedback from your phone.
+- **Sensors** – includes a **VCNL4040 light/proximity sensor** and the C3/C6/C6-Drive also include a **BNO085 9-axis IMU motion sensor** with onboard sensor-fusion algorithms for advanced orientation, motion, and activity detection.  
 
 Available Versions:
 
