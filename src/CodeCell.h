@@ -15,7 +15,7 @@
 #define LED_PIN 10U
 #endif
 
-#define SW_VERSION "2.0.0"
+#define SW_VERSION "2.0.1"
 #define MANUFACTURER "MICROBOTS"
 
 #define POWER_BAT_RUN 0U
@@ -176,5 +176,6 @@ public:
   uint16_t Motion_StepCounterRead();
   bool Motion_TapDetectorRead();
 };
+
 
 #endif
