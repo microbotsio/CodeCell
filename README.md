@@ -5,8 +5,7 @@
 ## About CodeCell
 
 CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease!  
-Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management — all programmable over a standard USB-C cable.  
-The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
+Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management - all programmable over a standard USB-C cable. The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
 
 All CodeCell modules are supported by the **CodeCell Arduino Library**, which provides simple, ready-to-use functions for light, proximity, motion, and power management.  
 You can even connect your CodeCell to our companion **MicroLink App** to add wireless sliders, buttons, joysticks, real-time sensor data, and a live 20-character display — perfect for debugging or control!
@@ -17,10 +16,10 @@ You can even connect your CodeCell to our companion **MicroLink App** to add wir
 
 | Model | Microcontroller | Features | Typical Use |
 |:------|:----------------|:----------|:-------------|
-| **CodeCell C3 Light** | ESP32-C3-MINI-1-N4 | Light + Proximity Sensor, LiPo Charging via USB-C | Basic sensing and IoT projects |
-| **CodeCell C3** | ESP32-C3-MINI-1-N4 | Light + Proximity Sensor + 9-Axis IMU Motion Sensor | Robotics & Wearables |
-| **CodeCell C6** | ESP32-C6-MINI-1-H8 | Wi-Fi 6 + BLE 5 + Zigbee, Light + Proximity + 9-Axis IMU Sensor | Advanced IoT & Low-Power Applications |
-| **CodeCell C6 Drive** | ESP32-C6-MINI-1-H8 | Dual H-Bridge Motor Drivers + Light + Motion Sensors | All-in-One Robotics Controller |
+| **CodeCell C3 Light** | ESP32-C3-MINI-1-N4 | 4MB FLash, Light + Proximity Sensor, LiPo Charging via USB-C | Basic sensing and IoT projects |
+| **CodeCell C3** | ESP32-C3-MINI-1-N4 | 4MB FLash, Light + Proximity Sensor + 9-Axis IMU Motion Sensor | Robotics & Wearables |
+| **CodeCell C6** | ESP32-C6-MINI-1-H8 | 8MB FLash, Wi-Fi 6 + BLE 5 + Zigbee, Light + Proximity + 9-Axis IMU Sensor | Robotics & Wearables with Low-Power Modes |
+| **CodeCell C6 Drive** | ESP32-C6-MINI-1-H8 | 8MB FLash, Dual H-Bridge Motor Drivers + Light + Motion Sensors | All-in-One Robotics Controller |
 
 ---
 
