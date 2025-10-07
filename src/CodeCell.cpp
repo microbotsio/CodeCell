@@ -41,17 +41,15 @@ void CodeCell::Init(uint32_t sense_motion) {
   pinMode(MOTION_WAKEUP_PIN, INPUT);  // Assumes active-low button
 #endif
 
-  delay(1); /*Uart Setup delay*/
-
-  if (Serial) {
-    serial_flag = 1;
-  }
-
   if (WakeUpCheck()) {
     Serial.println(">> Waking up..");
     _charge_state = POWER_INIT;
     _chrg_counter = 0;
   } else {
+    if (Serial) {
+      delay(1500); /*Uart Setup delay*/
+      serial_flag = 1;
+    }
     Serial.println(" ");
     Serial.println(" ");
 #if defined(ARDUINO_ESP32C6_DEV)
@@ -1559,4 +1557,5 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
   } else {
     //Skip
   }
+
 }
