@@ -4,10 +4,10 @@
 
 ## Overview
 
-CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease!  
-Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management - all programmable over a standard USB-C cable. The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
+CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease! Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management - all programmable over a standard USB-C cable. The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
 
 All CodeCell modules are supported by the **CodeCell Arduino Library**, which provides simple, ready-to-use functions for light, proximity, motion, and power management.  
+
 You can even connect your CodeCell to our companion **MicroLink App** to add wireless sliders, buttons, joysticks, real-time sensor data, and a live 20-character display — perfect for debugging or control!
 
 Each version of CodeCell shares the same compact 1.85 cm (C3/C6) or 2.25 cm (C6 Drive) form factor and includes:
