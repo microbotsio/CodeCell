@@ -56,20 +56,20 @@ Make sure the ESP32 boards package is installed
 (*Boards Manager → search for "esp32" by Espressif*).
 
 #### For CodeCell C3 (ESP32-C3)
-Board: ESP32C3 Dev Module  
-USB CDC On Boot: Enabled        // Required for Serial over USB  
-CPU Frequency: 160 MHz  
-Flash Size: 4 MB (32 Mb)  
-Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA / 190KB SPIFFS)  
-Port: Select the COM port for your CodeCell C3
+- Board: ESP32C3 Dev Module  
+- USB CDC On Boot: Enabled        // Required for Serial over USB  
+- CPU Frequency: 160 MHz  
+- Flash Size: 4 MB (32 Mb)  
+- Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA / 190KB SPIFFS)  
+- Port: Select the COM port for your CodeCell C3
 
 #### For CodeCell C6 (ESP32-C6)
-Board: ESP32C6 Dev Module  
-USB CDC On Boot: Enabled        // Required for Serial over USB  
-CPU Frequency: 160 MHz  
-Flash Size: 8 MB (64 Mb)  
-Partition Scheme: 8M with SPIFFS (3 MB APP / 1.5 MB SPIFFS)  
-Port: Select the COM port for your CodeCell C6
+- Board: ESP32C6 Dev Module  
+- USB CDC On Boot: Enabled        // Required for Serial over USB  
+- CPU Frequency: 160 MHz  
+- Flash Size: 8 MB (64 Mb)  
+- Partition Scheme: 8M with SPIFFS (3 MB APP / 1.5 MB SPIFFS)  
+- Port: Select the COM port for your CodeCell C6
 
 ### ⚙️ Init()
 
