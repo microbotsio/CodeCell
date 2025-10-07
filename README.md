@@ -2,7 +2,7 @@
 
 <img src="https://microbots.io/cdn/shop/files/penny_600x.png?v=1719926378" alt="CodeCell" width="300" align="right" style="margin-left: 20px;">
 
-## About CodeCell
+## ⚙️ Overview
 
 CodeCell is a family of tiny boards that help you miniaturize your DIY robots, wearables, and IoT projects with ease!  
 Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcontroller, onboard sensors, and smart power management - all programmable over a standard USB-C cable. The USB-C port also charges the LiPo battery that connects directly to the onboard connector.
@@ -10,43 +10,34 @@ Designed for makers, each CodeCell features an Arduino-compatible ESP32 microcon
 All CodeCell modules are supported by the **CodeCell Arduino Library**, which provides simple, ready-to-use functions for light, proximity, motion, and power management.  
 You can even connect your CodeCell to our companion **MicroLink App** to add wireless sliders, buttons, joysticks, real-time sensor data, and a live 20-character display — perfect for debugging or control!
 
----
+Each version of CodeCell shares the same compact 1.85 cm (C3/C6) or 2.25 cm (C6 Drive) form factor and includes:
 
-### 🔹 Available Versions
+- **USB-C Port** – for programming, serial communication, and battery charging.  
+- **LiPo Connector** – works with the included cable and the optional 170 mAh 20C battery (1.25 mm pitch).  
+- **BQ24232 Power Management** – enables dynamic power-path control for simultaneous operation and charging.  
+- **Programmable GPIO/PWM/ADC/I2C Pins** – expand your project with additional sensors, displays, or actuators.  
+- **CodeCell Library Support** – easy Arduino functions for reading sensors, LEDs, PWM, and sleep triggers.  
+- **MicroLink App Integration** – wireless control and real-time feedback from your phone.  
+
+Available Versions:
 
 | Model | Microcontroller | Features | Typical Use |
 |:------|:----------------|:----------|:-------------|
 | **CodeCell C3 Light** | ESP32-C3-MINI-1-N4 | 4MB Flash, Wi-Fi 4 + BLE 5, LiPo Charging via USB-C, Light + Proximity Sensor | Basic sensing and IoT projects |
 | **CodeCell C3** | ESP32-C3-MINI-1-N4 | 4MB Flash, Wi-Fi 4 + BLE 5, LiPo Charging via USB-C, Light + Proximity Sensor + 9-Axis IMU Motion Sensor | Robotics & Wearables |
 | **CodeCell C6** | ESP32-C6-MINI-1-H8 | 8MB Flash, Wi-Fi 6 + BLE 5 + Zigbee, LiPo Charging via USB-C, Light + Proximity + 9-Axis IMU Sensor | Robotics & Wearables with Low-Power Modes |
-| **CodeCell C6 Drive** | ESP32-C6-MINI-1-H8 | 8MB Flash, Wi-Fi 6 + BLE 5 + Zigbee, LiPo Charging via USB-C, Dual H-Bridge Motor Drivers + Light + Proximity + 9-Axis IMU Sensor | All-in-One Robotics Controller |
+| **CodeCell C6 Drive** | ESP32-C6-MINI-1-H8 | 8MB Flash, Wi-Fi 6 + BLE 5 + Zigbee, LiPo Charging via USB-C, Light + Proximity + 9-Axis IMU Sensor, Dual H-Bridge Motor Drivers | All-in-One Robotics Controller |
 
----
-
-### ✳️ Overview
-
-Each version of CodeCell shares the same compact 1.85 cm (C3/C6) or 2.25 cm (C6 Drive) form factor and includes:
-
-- **USB-C Port** – for programming, serial communication, and battery charging.  
-- **LiPo Connector** – works with the optional 170 mAh 20C battery (1.25 mm pitch).  
-- **BQ24232 Power Management** – enables dynamic power-path control for simultaneous operation and charging.  
-- **Programmable GPIO + I2C Pins** – expand your project with additional sensors, displays, or actuators.  
-- **CodeCell Library Support** – easy Arduino functions for reading sensors, LEDs, PWM, and sleep triggers.  
-- **MicroLink App Integration** – wireless control and real-time feedback from your phone.  
-
----
 
 ### 📦 Included in Every Box
 - CodeCell module (C3 Light / C3 / C6 / C6 Drive)  
 - Four M1.2 screws  
-- Three sets of female headers (optional soldering)  
+- Female headers (optional soldering)  
 - 1.25 mm battery cable  
 - Optional 170 mAh LiPo battery (add-on)
 
----
-
 ### 🧩 Certifications & Standards
-All CodeCell modules are:
+All modules are:
 - **FCC**, **CE**, **TELEC**, and **Wi-Fi Alliance** certified (via Espressif modules)  
 - **RoHS compliant**  
 - Built to **IPC-A-600 Class II** standards  
@@ -57,7 +48,6 @@ All CodeCell modules are:
 
 Get started and explore tutorials [here](https://microbots.io/pages/learn-codecell).
 
----
 
 ### 🧰 Arduino IDE Setup
 
