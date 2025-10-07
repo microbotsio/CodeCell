@@ -4,75 +4,171 @@
 
 CodeCell is a penny-sized board that helps you miniaturize your DIY robots, wearables, and IoT projects with ease! Designed for all makers, it features an Arduino-friendly ESP32-C3 Wi-Fi & BLE module, programmable through a standard USB-C cable ~ which can also charge a LiPo battery that easily plugs into the onboard connector. That’s not all! We've created a CodeCell library to make it easier to interact with the onboard sensors ~ its Light Sensor can detect darkness and measure proximity up to 20 cm! While the optional Motion Sensor features a 9-axis sensor-fusion IMU to measure angular rotations, step counts, personal activity, tapping, gravity, acceleration, rate of rotation, magnetic fields, and more!
 
-## Getting started with the CodeCell Library:
+## Getting Started with the CodeCell Library
 
-A full guide to get you started with CodeCell can be found [here](https://microbots.io/blogs/learn/codecell-basics-your-first-steps).
+A full guide to get you started with CodeCell can be found [here](https://microbots.io/pages/learn-codecell).
 
-### Init()
-- To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more of the predefined macros. Each macro corresponds to a specific sensing function. Here are the available macros:
-  
-  - `LIGHT`                          // Enables Light Sensing
-  - `MOTION_ACCELEROMETER`           // Enables Accelerometer Sensing
-  - `MOTION_GYRO`                    // Enables Gyroscope Sensing
-  - `MOTION_MAGNETOMETER`            // Enables Magnetometer Sensing
-  - `MOTION_LINEAR_ACC`              // Enables Linear Acceleration Sensing (without gravity component)
-  - `MOTION_GRAVITY`                 // Enables Gravity Sensing
-  - `MOTION_ROTATION`                // Enables Rotation Sensing
-  - `MOTION_ROTATION_NO_MAG`         // Enables Rotation Sensing without Magnetometer
-  - `MOTION_STEP_COUNTER`            // Enables Walking Step Counter
-  - `MOTION_STATE`                   // Enables Motion State Detection
-  - `MOTION_TAP_DETECTOR`            // Enables Tap Detector
-  - `MOTION_ACTIVITY`                // Enables Motion Activity Recognition
+---
 
-- Example Usage:
-  - `myCodeCell.Init(LIGHT);`                                      // Initializes Light Sensing
-  - `myCodeCell.Init(LIGHT + MOTION_ROTATION);`                    // Initializes Light Sensing and Angular Rotation Sensing
-  - `myCodeCell.Init(LIGHT + MOTION_ROTATION + MOTION_STATE);`     // Initializes Light Sensing, Angular Rotation Sensing, and State Detection
+### 🧰 Arduino IDE Setup
 
-Note: You can combine multiple macros using the `+` operator to initialize multiple sensors.
+Make sure the ESP32 boards package is installed  
+(*Boards Manager → search for "esp32" by Espressif*).
 
-### Run()
-The myCodeCell.Run() function in the loop() reads the date from the sensors with the selected sampling rate and manages the power status. To make it easier to time your projects, it also returns true at the specified sampling frequency, which can be between 10Hz and 100Hz. e.g. Run(10) returns true every 10Hz, and Run(100) returns true every 100Hz. The power status and sensors are read at this same frequency. This function also handles the onboard LED to indicate power status. When the battery voltage falls below 3.3V, the LED will blink red 10 times and then enter Sleep Mode until the USB cable is connected for charging. While charging, the CodeCell will still continue running your application, and light the LED blue. Once fully charged, it will turn Green. Once the cable is disconnected it will start a green breathing-light animation with a speed corresponding to the proximity distance. The LED will shine green when powered by the battery and blue when powered via USB. 
+#### For CodeCell C3 (ESP32-C3)
+Board: ESP32C3 Dev Module  
+USB CDC On Boot: Enabled        // Required for Serial over USB  
+CPU Frequency: 160 MHz  
+Flash Size: 4 MB (32 Mb)  
+Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA / 190KB SPIFFS)  
+Port: Select the COM port for your CodeCell C3
 
-### PowerStateRead()
-The power status of the CodeCell can be read using the PowerStateRead() function:
+#### For CodeCell C6 (ESP32-C6)
+Board: ESP32C6 Dev Module  
+USB CDC On Boot: Enabled        // Required for Serial over USB  
+CPU Frequency: 160 MHz  
+Flash Size: 8 MB (64 Mb)  
+Partition Scheme: 8M with SPIFFS (3 MB APP / 1.5 MB SPIFFS)  
+Port: Select the COM port for your CodeCell C6
 
-  - 0 = Running from LiPo Battery Power
-  - 1 = Running from USB Power
-  - 2 = Power Status is Initializing&nbsp;
-  - 3 = LiPo Battery is low
-  - 4 = LiPo Battery has fully charged
-  - 5 = LiPo Battery is charging
+---
 
-Note: This feature is available from software release v1.2.8 and above, so make sure you have updated the firmware. The CodeCell remains operational while charging the battery, so if you like to stop operation, we recommend polling the power status.
+### ⚙️ Init()
 
-### Read
+To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more predefined macros.  
+Each macro corresponds to a specific sensing function.
 
-- After initializing the sensors, you can use the following functions to read data from them:
+#### Available Macros
+LIGHT                          // Light + proximity sensing  
+MOTION_ACCELEROMETER           // 3-axis acceleration  
+MOTION_GYRO                    // 3-axis angular velocity  
+MOTION_MAGNETOMETER            // 3-axis magnetic field  
+MOTION_LINEAR_ACC              // Linear acceleration  
+MOTION_GRAVITY                 // Gravity vector  
+MOTION_ROTATION                // Roll, pitch, yaw (with mag)  
+MOTION_ROTATION_NO_MAG         // Roll, pitch, yaw (no mag)  
+MOTION_STEP_COUNTER            // Step count  
+MOTION_STATE                   // On table / Stationary / Stable / In motion  
+MOTION_TAP_DETECTOR            // Tap detection  
+MOTION_ACTIVITY                // Activity classification  
 
-  Sensor Read Functions:
-  
-  - `Light_ProximityRead()`                                            // Reads the proximity value from the light sensor
-  - `Light_WhiteRead()`                                                // Reads the white light intensity from the light sensor
-  - `Light_AmbientRead()`                                              // Reads the ambient light intensity from the light sensor
-  - `Motion_TapRead()`                                                 // Reads the number of taps detected (tap = 1, no tap = 0)
-  - `Motion_StepCounterRead()`                                         // Reads the number of steps counted
-  - `Motion_StateRead()`                                               // Reads the current state (On Table = 1, Stationary = 2, Stable = 3, Motion = 4)
-  - `Motion_ActivityRead()`                                            // Reads the current activity (Driving = 1, Cycling = 2, Walking = 3/6, Still = 4, Tilting = 5, Running = 7, Climbing Stairs = 8)
-  - `Motion_AccelerometerRead(float &x, float &y, float &z)`           // Reads acceleration data along the x, y, and z axes
-  - `Motion_GyroRead(float &x, float &y, float &z)`                    // Reads rotational velocity data along the x, y, and z axes
-  - `Motion_MagnetometerRead(float &x, float &y, float &z)`            // Reads magnetic field strength data along the x, y, and z axes
-  - `Motion_GravityRead(float &x, float &y, float &z)`                 // Reads gravity vector data along the x, y, and z axes
-  - `Motion_LinearAccRead(float &x, float &y, float &z)`               // Reads linear acceleration data along the x, y, and z axes
-  - `Motion_RotationRead(float &roll, float &pitch, float &yaw)`       // Reads angular rotational data (roll, pitch, yaw)
-  - `Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw)`  // Reads angular rotational data without magnetometer
+#### Example Usage
+myCodeCell.Init(LIGHT);                                 // Light only  
+myCodeCell.Init(LIGHT + MOTION_ROTATION);               // Light + orientation  
+myCodeCell.Init(LIGHT + MOTION_ROTATION + MOTION_STATE);// Light + orientation + state  
 
-- Example Usage:
-  - `uint16_t proximity = myCodeCell.Light_ProximityRead();`
-  - `myCodeCell.Motion_AccelerometerRead(myX, myY, myZ);`
-  - `myCodeCell.Motion_RotationRead(myRoll, myPitch, myYaw);`
+💡 Combine multiple macros using the `+` operator to enable multiple sensors.
 
-Note: You can use `myCodeCell.PrintSensors()` to print the values of all enabled sensors on the Serial Monitor.
+---
+
+### 🔁 Run()
+
+The `myCodeCell.Run()` function reads sensor data at a defined frequency and manages power and LED status.
+
+#### Example
+if (myCodeCell.Run(10)) {
+  // Executes code every 10 Hz (every 100 ms)
+}
+
+- `myCodeCell.Run(10)` → returns `true` at 10 Hz (every 100 ms)  
+- Read all enabled sensors at this rate  
+- Also handles the LED power indicator and power status 
+
+**Low battery behavior:**  
+Below ~3.3 V → LED blinks red ×10 → enters sleep until USB is reconnected  
+On USB → continues running loop(); LED shows charging/charged status  
+
+---
+
+### 🔋 Power & Battery Functions
+
+#### PowerStateRead()
+uint8_t state = myCodeCell.PowerStateRead();
+
+Return values:
+0 = Running from LiPo Battery  
+1 = Running from USB Power  
+2 = Power Initializing  
+3 = Battery Low  
+4 = Battery Fully Charged  
+5 = Battery Charging  
+
+#### BatteryVoltageRead()
+int mv = myCodeCell.BatteryVoltageRead();   // e.g. 3720 (mV)  
+Returns the LiPo voltage in millivolts — great for thresholds or logging.
+
+#### BatteryLevelRead()
+uint16_t lvl = myCodeCell.BatteryLevelRead();
+
+Return values:
+1–100  = Approximate battery percentage  
+101    = Charging (USB connected, charging)  
+102    = USB Power (bypassing battery)  
+
+Example:
+if (lvl <= 100) { Serial.println("Battery: " + String(lvl) + "%"); }  
+else if (lvl == 101) { Serial.println("Charging..."); }  
+else if (lvl == 102) { Serial.println("USB Power"); }  
+
+---
+
+### 📈 Reading Sensors
+
+After initialization, you can read the sensors using these functions:
+
+Light_ProximityRead()                                           // Proximity  
+Light_WhiteRead()                                               // White light intensity  
+Light_AmbientRead()                                             // Ambient light  
+Motion_TapRead()                                                // Tap detection (1 = tap, 0 = none)  
+Motion_StepCounterRead()                                        // Step count  
+Motion_StateRead()                                              // On Table=1, Stationary=2, Stable=3, Motion=4  
+Motion_ActivityRead()                                           // Driving=1, Cycling=2, Walking=3/6, Still=4, Tilting=5, Running=7, Climbing=8  
+Motion_AccelerometerRead(float &x, float &y, float &z)          // Accelerometer (m/s²)  
+Motion_GyroRead(float &x, float &y, float &z)                   // Gyroscope (°/s)  
+Motion_MagnetometerRead(float &x, float &y, float &z)           // Magnetometer (µT)  
+Motion_GravityRead(float &x, float &y, float &z)                // Gravity vector  
+Motion_LinearAccRead(float &x, float &y, float &z)              // Linear acceleration  
+Motion_RotationRead(float &roll, float &pitch, float &yaw)      // Rotation (degrees)  
+Motion_RotationNoMagRead(float &roll, float &pitch, float &yaw) // Rotation w/o mag  
+Motion_RotationVectorRead(float &vec_r, float &vec_i, float &vec_j, float &vec_k) // Quaternion  
+
+#### Example Usage
+uint16_t proximity = myCodeCell.Light_ProximityRead();  
+myCodeCell.Motion_AccelerometerRead(x, y, z);  
+myCodeCell.Motion_RotationRead(roll, pitch, yaw);  
+
+🧠 Tip: Use `myCodeCell.PrintSensors();` to print all enabled sensor readings to the Serial Monitor.
+
+---
+
+### ⚡ GPIO Control
+myCodeCell.pinWrite(uint8_t pin, bool value);              // Digital write  
+myCodeCell.pinRead(uint8_t pin);                           // Digital read  
+myCodeCell.pinPWM(uint8_t pin, uint16_t freq, uint8_t dc); // PWM output (Hz, duty%)  
+myCodeCell.pinADC(uint8_t pin);                            // Analog read  
+
+---
+
+### 💡 LED Control
+myCodeCell.LED_SetBrightness(0);   // Turn off CodeCell LED  
+myCodeCell.LED_SetBrightness(10);  // Full brightness  
+
+---
+
+### 😴 Sleep Functions
+myCodeCell.SleepTimer(uint16_t sleep_sec);  
+myCodeCell.SleepProximityTrigger(uint16_t threshold);  // C6 only  
+myCodeCell.SleepLightTrigger(uint16_t threshold);      // C6 only  
+myCodeCell.SleepDarkTrigger(uint16_t threshold);       // C6 only  
+myCodeCell.SleepTapTrigger();                          // C6 only  
+
+---
+
+### 📱 MicroLink App Integration
+- Download the MicroLink library to connect the CodeCell with the companion smartphone app.  
+- Enables wireless sensor streaming, joystick control, and firmware communication.  
+
+---
 
 ## Attribution
 This 'CodeCell' library contains various features, including device intialization, power managment, light sensning and motion sensing. The VCNL4040 light sensor code does not rely on any external libraries. But some of the BNO085 Motion-sensor functions were adapted from the [SparkFun BNO08x Arduino Library](https://github.com/sparkfun/SparkFun_BNO08x_Arduino_Library) and the official library provided by [CEVA](https://github.com/ceva-dsp/sh2/tree/main) for the SH2 sensor hub.
