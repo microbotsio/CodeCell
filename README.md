@@ -71,8 +71,6 @@ Flash Size: 8 MB (64 Mb)
 Partition Scheme: 8M with SPIFFS (3 MB APP / 1.5 MB SPIFFS)  
 Port: Select the COM port for your CodeCell C6
 
----
-
 ### ⚙️ Init()
 
 To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more predefined macros.  
@@ -99,8 +97,6 @@ myCodeCell.Init(LIGHT + MOTION_ROTATION + MOTION_STATE);// Light + orientation +
 
 🧠 Combine multiple macros using the `+` operator to enable multiple sensors.
 
----
-
 ### 🔁 Run()
 
 The `myCodeCell.Run()` function reads sensor data at a defined frequency and manages power and LED status.
@@ -117,8 +113,6 @@ if (myCodeCell.Run(10)) {
 **Low battery behavior:**  
 Below ~3.3 V → LED blinks red ×10 → enters sleep until USB is reconnected  
 On USB → continues running loop(); LED shows charging/charged status  
-
----
 
 ### 🔋 Power & Battery Functions
 
@@ -150,8 +144,6 @@ if (lvl <= 100) { Serial.println("Battery: " + String(lvl) + "%"); }
 else if (lvl == 101) { Serial.println("Charging..."); }  
 else if (lvl == 102) { Serial.println("USB Power"); }  
 
----
-
 ### 📈 Reading Sensors
 
 After initialization, you can read the sensors using these functions:
@@ -179,21 +171,15 @@ myCodeCell.Motion_RotationRead(roll, pitch, yaw);
 
 🧠 Tip: Use `myCodeCell.PrintSensors();` to print all enabled sensor readings to the Serial Monitor.
 
----
-
 ### ⚡ GPIO Control
 myCodeCell.pinWrite(uint8_t pin, bool value);              // Digital write  
 myCodeCell.pinRead(uint8_t pin);                           // Digital read  
 myCodeCell.pinPWM(uint8_t pin, uint16_t freq, uint8_t dc); // PWM output (Hz, duty%)  
 myCodeCell.pinADC(uint8_t pin);                            // Analog read  
 
----
-
 ### 💡 Onboard LED Control
 myCodeCell.LED_SetBrightness(0);   // Turn off CodeCell LED  
 myCodeCell.LED_SetBrightness(10);  // Full brightness  
-
----
 
 ### 💤 Sleep Functions
 myCodeCell.SleepTimer(uint16_t sleep_sec);  
@@ -201,8 +187,6 @@ myCodeCell.SleepProximityTrigger(uint16_t threshold);  // C6 only
 myCodeCell.SleepLightTrigger(uint16_t threshold);      // C6 only  
 myCodeCell.SleepDarkTrigger(uint16_t threshold);       // C6 only  
 myCodeCell.SleepTapTrigger();                          // C6 only  
-
----
 
 ### 📱 MicroLink App Integration
 - Download the MicroLink library to connect the CodeCell with the companion smartphone app.  
