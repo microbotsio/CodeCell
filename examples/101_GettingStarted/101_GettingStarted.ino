@@ -47,7 +47,8 @@
   - myCodeCell.Init(LIGHT + MOTION_ROTATION + MOTION_STATE);// Light + orientation + state
 
   Run() Loop:
-  - myCodeCell.Run(10) returns true at 10 Hz (every 100 ms).
+  - Example: myCodeCell.Run(10) returns true at 10 Hz (every 100 ms)
+  - Read all enabled sensors at this rate (Range: 1Hz - 100Hz)
   - The same call updates power status, reads enabled sensors, and drives the status LED.
   - Low battery behavior: below ~3.3 V the LED blinks red 10×, then the unit sleeps until USB is connected.
   - While on USB: the loop() keeps running; LED shows charging/charged status.
