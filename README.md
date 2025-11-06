@@ -101,7 +101,7 @@ if (myCodeCell.Run(10)) {
 }
 
 - `myCodeCell.Run(10)` → returns `true` at 10 Hz (every 100 ms)  
-- Read all enabled sensors at this rate  
+- Read all enabled sensors at this rate  (Range: 1Hz - 100Hz)
 - Also handles the LED power indicator and power status 
 
 **Low battery behavior:**  
