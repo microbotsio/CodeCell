@@ -18,7 +18,7 @@ void setup() {
 
 void loop() {
   if (myCodeCell.Run(10)) {            // Run the CodeCell service loop at 10 Hz (every 100 ms)
-    if (myCodeCell.Motion_TapRead()) { // Check if a tap event was detected
+    if (myCodeCell.Motion_TapDetectorRead()) { // Check if a tap event was detected
       Serial.println(">> Tap Detected!");
       myCodeCell.LED(0xA0, 0x60, 0x00); // Turn on LED yellow
       delay(1000);                      // Keep the LED on for 1 second
