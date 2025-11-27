@@ -1,6 +1,6 @@
 /*
   Example: Motion State Monitor Demo
-  Boards: CodeCell C3 / CodeCell C3 Light / CodeCell C6 / CodeCell C6 Drive
+  Boards: CodeCell C3 / CodeCell C6 / CodeCell C6 Drive
 
   Overview:
   - Demonstrates the CodeCell's Motion State sensing.
