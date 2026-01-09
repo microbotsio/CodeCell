@@ -7,20 +7,14 @@
   - The onboard RGB LED behaves as the "light" controlled by your Zigbee hub
   - Compatible with Home Assistant and other standard coordinators
 
-  Required Arduino Tools Settings:
-  - Board: ESP32C6 Dev Module
-  - Flash Size: 8MB (64Mb)
-  - Partition Scheme: Zigbee 8MB with spiffs
-  - Zigbee Mode: Zigbee ED (end device)
-
   Zigbee Behavior:
   - Exposes a standard on/off light cluster on endpoint 10
   - Coordinator toggles the light → CodeCell LED turns ON/OFF accordingly
-
-  Notes:
-  - Make sure Zigbee end-device mode is selected; the sketch will error if not
-  - LED behavior can be changed to control other peripherals instead
-  - Useful for testing Zigbee connectivity, automation triggers, and endpoint behavior
+  
+  Required Arduino Tools Settings:
+  - Flash Size: 8MB (64Mb)
+  - Partition Scheme: Zigbee 8MB with spiffs
+  - Zigbee Mode: Zigbee ED (end device)
 
 */
 
@@ -48,10 +42,8 @@ void setCodeCellLED(bool on) {
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
 
-  // Init CodeCell (no sensors needed, just LED)
-  myCodeCell.Init(LIGHT);
+  myCodeCell.Init(LIGHT);// Init CodeCell
   myCodeCell.LED_SetBrightness(0);
   myCodeCell.LED(0, 0, 0);
 
@@ -83,3 +75,4 @@ void loop() {
   if (myCodeCell.Run(10)) {  // Run loop at 10 Hz
   }
 }
+
