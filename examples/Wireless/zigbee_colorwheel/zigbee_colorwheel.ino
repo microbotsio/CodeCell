@@ -3,11 +3,14 @@
   Boards: CodeCell C6 / CodeCell C6 Drive
 
   Overview:
-  - Exposes the CodeCell as a Zigbee color dimmable light.
-  - Home Assistant color wheel + brightness slider control
-    the onboard RGB LED color and intensity.
-  - Supports on/off + color + brightness.
-  - Brightness is applied by scaling the RGB values (no brightness changes in callback).
+  - Exposes the CodeCell as a Zigbee color dimmable light
+  - Home Assistant color wheel + brightness slider control the onboard RGB LED color 
+  - Supports on/off + color + brightness
+  
+  Required Arduino Tools Settings:
+  - Flash Size: 8MB (64Mb)
+  - Partition Scheme: Zigbee 8MB with spiffs
+  - Zigbee Mode: Zigbee ED (end device)
 */
 
 #ifndef ZIGBEE_MODE_ED
@@ -46,10 +49,8 @@ void setCodeCellColor(bool state, uint8_t red, uint8_t green, uint8_t blue, uint
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
-
-  // Init CodeCell – LED only is enough, but LIGHT is fine if you reuse sensors
-  myCodeCell.Init(LIGHT);
+  
+  myCodeCell.Init(LIGHT); // Init CodeCell
   myCodeCell.LED(0, 0, 0);
   myCodeCell.LED_SetBrightness(0); //Turn off LED
 
@@ -86,3 +87,4 @@ void setup() {
 void loop() {
   //wait
 }
+
