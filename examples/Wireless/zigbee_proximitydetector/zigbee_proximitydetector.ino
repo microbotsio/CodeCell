@@ -32,9 +32,8 @@ bool lastPresence = false;
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
 
-  myCodeCell.Init(LIGHT); // Init CodeCell 
+  myCodeCell.Init(LIGHT); // Init CodeCell with proximity light sensing
   myCodeCell.LED_SetBrightness(10);
   myCodeCell.LED(0, 0, 0);
 
@@ -91,4 +90,5 @@ void loop() {
     }
   }
 }
+
 
