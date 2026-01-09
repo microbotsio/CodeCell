@@ -8,7 +8,6 @@
   - Can be used as a trigger in Home Assistant / other coordinators.
 
   Required Arduino Tools Settings:
-  - Board: ESP32C6 Dev Module
   - Flash Size: 8MB (64Mb)
   - Partition Scheme: Zigbee 8MB with spiffs
   - Zigbee Mode: Zigbee ED (end device)
@@ -32,12 +31,10 @@ bool lastMoving = false;
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
-
-  // Enable motion state sensing on CodeCell
-  myCodeCell.Init(MOTION_STATE);
-  myCodeCell.LED_SetBrightness(10);
+  
+  myCodeCell.Init(MOTION_STATE); // Enable motion state sensing on CodeCell
   myCodeCell.LED(0, 0, 0);
+  myCodeCell.LED_SetBrightness(10);
 
   // Optional: name/model that show up in your Zigbee coordinator
   zbMotion.setManufacturerAndModel("Microbots", "CodeCellC6-Motion");
@@ -69,8 +66,7 @@ void setup() {
 }
 
 void loop() {
-  // 10 Hz update rate, same as your original example
-  if (myCodeCell.Run(10)) {
+  if (myCodeCell.Run(10)) {  // 10 Hz update rate
     uint8_t state = myCodeCell.Motion_StateRead();
     bool moving = false;
 
@@ -86,12 +82,8 @@ void loop() {
     // Only notify Zigbee when motion state changes
     if (moving != lastMoving) {
       lastMoving = moving;
-
       zbMotion.setBinaryInput(moving);
       zbMotion.reportBinaryInput();
-
-      Serial.print("Motion changed → ");
-      Serial.println(moving ? "MOTION (1)" : "NO MOTION (0)");
 
       // Optional LED feedback
       if (moving) {
@@ -102,3 +94,4 @@ void loop() {
     }
   }
 }
+
