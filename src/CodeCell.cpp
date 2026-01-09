@@ -599,7 +599,7 @@ void CodeCell::SleepTapTrigger() {
   pinMode(8, INPUT);
   pinMode(9, INPUT);
 
-  digitalWrite(SENS_ON_PIN, HIGH);  // Hold the IMU’s LDO enable pin high (already done in your code)
+  digitalWrite(SENS_ON_PIN, HIGH);  // Hold the IMU’s LDO enable pin high 
   gpio_hold_en((gpio_num_t)SENS_ON_PIN);
 
   delay(100);
@@ -1559,3 +1559,4 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
   }
 
 }
+
