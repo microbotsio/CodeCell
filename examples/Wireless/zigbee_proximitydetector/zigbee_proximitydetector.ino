@@ -8,7 +8,6 @@
   - LED turns RED when presence is detected.
 
   Required Arduino Tools Settings:
-  - Board: ESP32C6 Dev Module
   - Flash Size: 8MB (64Mb)
   - Partition Scheme: Zigbee 8MB with spiffs
   - Zigbee Mode: Zigbee ED (end device)
@@ -35,19 +34,16 @@ void setup() {
   Serial.begin(115200);
   delay(2000);
 
-  // Init CodeCell with light + proximity sensor enabled
-  myCodeCell.Init(LIGHT);
+  myCodeCell.Init(LIGHT); // Init CodeCell 
   myCodeCell.LED_SetBrightness(10);
   myCodeCell.LED(0, 0, 0);
 
   // Optional: name/model that show up in the coordinator
   zbPresence.setManufacturerAndModel("Microbots", "CodeCellC6-Proximity");
 
-  // Configure this endpoint as a binary *input* (presence/motion-like)
+  // Configure this endpoint as a binary input (presence/motion-like)
   zbPresence.addBinaryInput();
-  // You can pick whichever application type makes most sense for your use case:
-  // - HVAC occupancy: BINARY_INPUT_APPLICATION_TYPE_HVAC_OCCUPANCY
-  // - Security motion: BINARY_INPUT_APPLICATION_TYPE_SECURITY_MOTION_DETECTION
+
   zbPresence.setBinaryInputApplication(BINARY_INPUT_APPLICATION_TYPE_SECURITY_MOTION_DETECTION);
   zbPresence.setBinaryInputDescription("Proximity Presence");
 
@@ -70,9 +66,8 @@ void setup() {
   Serial.println("\nZigbee connected!");
 }
 
-void loop() {
-  // Run at 1 Hz – same pattern as your original example
-  if (myCodeCell.Run(1)) {
+void loop() { 
+  if (myCodeCell.Run(1)) {  // Run at 1 Hz 
     uint16_t proximity = myCodeCell.Light_ProximityRead();
     bool presence = (proximity > DISTANCE_RANGE);
 
@@ -96,3 +91,4 @@ void loop() {
     }
   }
 }
+
