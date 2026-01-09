@@ -6,7 +6,7 @@
   - Uses the onboard motion sensor to detect a tap gesture.
   - Lets you put the device into low-power sleep from the MicroLink app.
   - While asleep, a tap on the device will wake it back up.
-  - Estimated sleep current consumption: ~200 µA
+  - Estimated sleep current consumption: ~860 µA
 
   App Controls:
   - Button A: Put CodeCell to sleep. It will wake on the next tap.
