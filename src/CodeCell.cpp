@@ -151,12 +151,7 @@ void CodeCell::Init(uint32_t sense_motion) {
   timerAttachInterrupt(cctimer, &cc_Timer); /*Attach interrupt*/
   timerAlarm(cctimer, 100000, true, 0);     /*Set alarm to trigger every 100ms with auto-reload*/
 
-  double double_battery_voltage = (double)analogRead(4) * 1.448;
-#if defined(ARDUINO_ESP32C6_DEV)
-  uint16_t battery_voltage = (uint16_t)double_battery_voltage + 1154;
-#else
-  uint16_t battery_voltage = (uint16_t)double_battery_voltage;
-#endif
+  battery_voltage = ((uint16_t)analogReadMilliVolts(4)) * 2U;
 
   if (battery_voltage < USB_VOLTAGE) {
     _charge_color = LED_COLOR_GREEN;
@@ -800,13 +795,8 @@ uint8_t CodeCell::BatteryLevelRead() {
 
 uint16_t CodeCell::BatteryVoltageRead() {
   uint32_t voltage_avrg_total = 0;
-  double voltage = (double)analogRead(4) * 1.448;  //* 5930 / 4095
-
-#if defined(ARDUINO_ESP32C6_DEV)
-  _voltage_avrg[_voltage_index] = (uint16_t)voltage + 1154;
-#else
-  _voltage_avrg[_voltage_index] = (uint16_t)voltage;
-#endif
+  _voltage_avrg[_voltage_index] = ((uint16_t)analogReadMilliVolts(4)) * 2U;
+  
   _voltage_index++;
   if (_voltage_index >= AVRG_FILTER_SIZE) {
     _voltage_index = 0;
