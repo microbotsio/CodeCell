@@ -151,7 +151,7 @@ void CodeCell::Init(uint32_t sense_motion) {
   timerAttachInterrupt(cctimer, &cc_Timer); /*Attach interrupt*/
   timerAlarm(cctimer, 100000, true, 0);     /*Set alarm to trigger every 100ms with auto-reload*/
 
-  battery_voltage = ((uint16_t)analogReadMilliVolts(4)) * 2U;
+  battery_voltage = (((uint16_t)analogReadMilliVolts(4)) * 2U)+65U;
 
   if (battery_voltage < USB_VOLTAGE) {
     _charge_color = LED_COLOR_GREEN;
@@ -795,7 +795,7 @@ uint8_t CodeCell::BatteryLevelRead() {
 
 uint16_t CodeCell::BatteryVoltageRead() {
   uint32_t voltage_avrg_total = 0;
-  _voltage_avrg[_voltage_index] = ((uint16_t)analogReadMilliVolts(4)) * 2U;
+  _voltage_avrg[_voltage_index] = (((uint16_t)analogReadMilliVolts(4)) * 2U) +65U;
   
   _voltage_index++;
   if (_voltage_index >= AVRG_FILTER_SIZE) {
@@ -1549,4 +1549,5 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
   }
 
 }
+
 
