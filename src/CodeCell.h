@@ -15,7 +15,7 @@
 #define LED_PIN 10U
 #endif
 
-#define SW_VERSION "2.0.3"
+#define SW_VERSION "2.0.4"
 #define MANUFACTURER "MICROBOTS"
 
 #define POWER_BAT_RUN 0U
@@ -179,5 +179,6 @@ public:
 
 
 #endif
+
 
 
