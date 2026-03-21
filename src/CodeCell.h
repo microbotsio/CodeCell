@@ -15,7 +15,7 @@
 #define LED_PIN 10U
 #endif
 
-#define SW_VERSION "2.0.4"
+#define SW_VERSION "2.0.5"
 #define MANUFACTURER "MICROBOTS"
 
 #define POWER_BAT_RUN 0U
@@ -24,7 +24,7 @@
 #define POWER_BAT_LOW 3U
 #define POWER_BAT_FULL 4U
 #define POWER_BAT_CHRG 5U
-#define USB_VOLTAGE 4190
+#define USB_VOLTAGE 4220
 #define MIN_BATTERY_VOLTAGE 3350
 
 #define LED_DEFAULT_BRIGHTNESS 7U
