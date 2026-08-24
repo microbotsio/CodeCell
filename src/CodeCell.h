@@ -133,6 +133,7 @@ public:
   void Test();
   void USBSleep();
   void SleepTimer(uint16_t sleep_sec);
+  void SleepGPIOTrigger(bool STATE, uint8_t WAKEUP_PIN);
 #if defined(ARDUINO_ESP32C6_DEV)
   void SleepProximityTrigger(uint16_t trigger_threshold);
   void SleepLightTrigger(uint16_t trigger_threshold);
