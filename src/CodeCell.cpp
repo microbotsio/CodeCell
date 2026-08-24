@@ -128,12 +128,12 @@ void CodeCell::Init(uint32_t sense_motion) {
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(7, OUTPUT);
-  digitalWrite(1, LOW); /*Init Set up to output low*/
-  digitalWrite(2, LOW); /*Init Set up to output low*/
-  digitalWrite(3, LOW); /*Init Set up to output low*/
-  digitalWrite(5, LOW); /*Init Set up to output low*/
-  digitalWrite(6, LOW); /*Init Set up to output low*/
-  digitalWrite(7, LOW); /*Init Set up to output low*/
+  digitalWrite(1, LOW);  /*Init Set up to output low*/
+  digitalWrite(2, LOW);  /*Init Set up to output low*/
+  digitalWrite(3, LOW);  /*Init Set up to output low*/
+  digitalWrite(5, LOW);  /*Init Set up to output low*/
+  digitalWrite(6, LOW);  /*Init Set up to output low*/
+  digitalWrite(7, LOW);  /*Init Set up to output low*/
 #endif
 
   if ((_msense & 0b111111111111) != MOTION_DISABLE) {
@@ -151,7 +151,7 @@ void CodeCell::Init(uint32_t sense_motion) {
   timerAttachInterrupt(cctimer, &cc_Timer); /*Attach interrupt*/
   timerAlarm(cctimer, 100000, true, 0);     /*Set alarm to trigger every 100ms with auto-reload*/
 
- uint16_t battery_voltage = (((uint16_t)analogReadMilliVolts(4)) * 2U)+65U;
+  uint16_t battery_voltage = (((uint16_t)analogReadMilliVolts(4)) * 2U) + 65U;
 
   if (battery_voltage < USB_VOLTAGE) {
     _charge_color = LED_COLOR_GREEN;
@@ -267,8 +267,8 @@ void CodeCell::SleepTimer(uint16_t sleep_sec) {
     Motion.modeSleep();
   }
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
   pinMode(8, INPUT);
@@ -286,7 +286,101 @@ void CodeCell::SleepTimer(uint16_t sleep_sec) {
 }
 
 
+void CodeCell::SleepGPIOTrigger(bool STATE, uint8_t WAKEUP_PIN) {
+  if (pinCheck(WAKEUP_PIN, PIN_TYPE_INPUT) && (WAKEUP_PIN <= 3)) {
+    Serial.println(">> Going To Sleep..");
+    Serial.println(" ");
+    if (!_wakeup_flag) {
+      LED(0, 0, 0);
+    }
+    pinMode(1, INPUT);
+    pinMode(2, INPUT);
+    pinMode(3, INPUT);
+    pinMode(5, INPUT);
+    pinMode(6, INPUT);
+    pinMode(7, INPUT);
+
+    // Clear VCNL4040 interrupt flags
+    _i2c_write_array[_i2c_write_size++] = VCNL4040_INT_FLAG;
+    _i2c_write_array[_i2c_write_size++] = 0x00;  // LSB
+    _i2c_write_array[_i2c_write_size++] = 0x00;  // MSB
+    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+      Serial.println(">> Error: Light Sensor not found");
+    }
+    _i2c_write_size = 0;
+    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF3_REG;
+    _i2c_write_array[_i2c_write_size++] = 0x00;
+    _i2c_write_array[_i2c_write_size++] = 0x00;
+    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+      Serial.println(">> Error: Light Sensor not found");
+    }
+    _i2c_write_size = 0;
+    _i2c_write_array[_i2c_write_size++] = VCNL4040_ALS_CONF_REG;
+    _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);
+    _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);
+    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+      Serial.println(">> Error: Light Sensor not found");
+    }
+    _i2c_write_size = 0;
+    _i2c_write_array[_i2c_write_size++] = VCNL4040_PS_CONF1_REG;
+    _i2c_write_array[_i2c_write_size++] = (0x01 & 0xFF);
+    _i2c_write_array[_i2c_write_size++] = ((0x01 >> 8) & 0xFF);
+    if (!I2CWrite(VCNL4040_ADDRESS, _i2c_write_array, _i2c_write_size)) {
+      Serial.println(">> Error: Light Sensor not found");
+    }
+    _i2c_write_size = 0;
+
+
+    delay(2);
+
+    if ((_msense & 0b111111111111) != MOTION_DISABLE) {
+      Motion.modeSleep();
+    }
+    delay(2);
+
+
 #if defined(ARDUINO_ESP32C6_DEV)
+    digitalWrite(LED_ON_PIN, LOW);
+    digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
+#endif
+    digitalWrite(LED_PIN, LOW);
+    pinMode(LED_PIN, INPUT);
+    Wire.end();  // Stop I2C
+
+    pinMode(8, INPUT);
+    pinMode(9, INPUT);
+
+#if defined(ARDUINO_ESP32C6_DEV)
+    pinMode(LIGHT_WAKEUP_PIN, INPUT);
+    pinMode(MOTION_WAKEUP_PIN, INPUT);
+#endif
+
+    // Configure GPIO wake-up state
+    if (STATE) {
+      // Wake when GPIO becomes HIGH
+      pinMode(WAKEUP_PIN, INPUT_PULLDOWN);
+
+      esp_deep_sleep_enable_gpio_wakeup(
+        1ULL << WAKEUP_PIN,
+        ESP_GPIO_WAKEUP_GPIO_HIGH);
+    } else {
+      // Wake when GPIO becomes LOW
+      pinMode(WAKEUP_PIN, INPUT_PULLUP);
+
+      esp_deep_sleep_enable_gpio_wakeup(
+        1ULL << WAKEUP_PIN,
+        ESP_GPIO_WAKEUP_GPIO_LOW);
+    }
+
+    esp_deep_sleep_start();
+  } else {
+    Serial.println(">> Error: Pin not Supported");
+  }
+}
+
+
+#if defined(ARDUINO_ESP32C6_DEV)
+
 void CodeCell::SleepProximityTrigger(uint16_t trigger_threshold) {
   Serial.println(">> Going To Sleep..");
   Serial.println(" ");
@@ -357,8 +451,8 @@ void CodeCell::SleepProximityTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
   pinMode(8, INPUT);
@@ -440,8 +534,8 @@ void CodeCell::SleepDarkTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
   pinMode(8, INPUT);
@@ -523,8 +617,8 @@ void CodeCell::SleepLightTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
   pinMode(8, INPUT);
@@ -583,8 +677,8 @@ void CodeCell::SleepTapTrigger() {
   }
   _i2c_write_size = 0;
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   digitalWrite(LED_ON_PIN, LOW);
 
   bool ok = Motion.enableWakeOnTapDetector(10000);  // Enable tap detector as wake sensor
@@ -594,7 +688,7 @@ void CodeCell::SleepTapTrigger() {
   pinMode(8, INPUT);
   pinMode(9, INPUT);
 
-  digitalWrite(SENS_ON_PIN, HIGH);  // Hold the IMU’s LDO enable pin high 
+  digitalWrite(SENS_ON_PIN, HIGH);  // Hold the IMU’s LDO enable pin high
   gpio_hold_en((gpio_num_t)SENS_ON_PIN);
 
   delay(100);
@@ -651,8 +745,8 @@ void CodeCell::USBSleep() {
   }
   delay(1000);
 
-  digitalWrite(10, LOW);
-  pinMode(10, INPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
   pinMode(8, INPUT);
@@ -795,8 +889,8 @@ uint8_t CodeCell::BatteryLevelRead() {
 
 uint16_t CodeCell::BatteryVoltageRead() {
   uint32_t voltage_avrg_total = 0;
-  _voltage_avrg[_voltage_index] = (((uint16_t)analogReadMilliVolts(4)) * 2U) +65U;
-  
+  _voltage_avrg[_voltage_index] = (((uint16_t)analogReadMilliVolts(4)) * 2U) + 65U;
+
   _voltage_index++;
   if (_voltage_index >= AVRG_FILTER_SIZE) {
     _voltage_index = 0;
@@ -1547,8 +1641,4 @@ void CodeCell::pinPWM(uint8_t pin_num, uint16_t pin_freq, uint8_t pin_dutycycle)
   } else {
     //Skip
   }
-
 }
-
-
-
