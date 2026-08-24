@@ -266,8 +266,17 @@ void CodeCell::SleepTimer(uint16_t sleep_sec) {
   if ((_msense & 0b111111111111) != MOTION_DISABLE) {
     Motion.modeSleep();
   }
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
 
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
   pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
@@ -343,7 +352,18 @@ void CodeCell::SleepGPIOTrigger(bool STATE, uint8_t WAKEUP_PIN) {
     digitalWrite(LED_ON_PIN, LOW);
     digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 #endif
+    // Release the addressable LED pin from the RMT peripheral
+    LED(0, 0, 0);
+    delay(1);
+    rmtDeinit(LED_PIN);
+
+    // Force the LED data line LOW before sleep
+    pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
+    delay(1);
+
+    // Leave the pin high impedance during deep sleep
+    pinMode(LED_PIN, INPUT);
     pinMode(LED_PIN, INPUT);
     Wire.end();  // Stop I2C
 
@@ -451,7 +471,18 @@ void CodeCell::SleepProximityTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
+
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
+  pinMode(LED_PIN, INPUT);
   pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
@@ -534,7 +565,18 @@ void CodeCell::SleepDarkTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
+
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
+  pinMode(LED_PIN, INPUT);
   pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
@@ -617,7 +659,18 @@ void CodeCell::SleepLightTrigger(uint16_t trigger_threshold) {
   digitalWrite(LED_ON_PIN, LOW);
   digitalWrite(SENS_ON_PIN, LOW);  //Turn off motion sensor
 
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
+
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
+  pinMode(LED_PIN, INPUT);
   pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
@@ -676,8 +729,18 @@ void CodeCell::SleepTapTrigger() {
     Serial.println(">> Error: Light Sensor not found");
   }
   _i2c_write_size = 0;
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
 
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
+  pinMode(LED_PIN, INPUT);
   pinMode(LED_PIN, INPUT);
   digitalWrite(LED_ON_PIN, LOW);
 
@@ -744,8 +807,18 @@ void CodeCell::USBSleep() {
     Motion.modeSleep();
   }
   delay(1000);
+  // Release the addressable LED pin from the RMT peripheral
+  LED(0, 0, 0);
+  delay(1);
+  rmtDeinit(LED_PIN);
 
+  // Force the LED data line LOW before sleep
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  delay(1);
+
+  // Leave the pin high impedance during deep sleep
+  pinMode(LED_PIN, INPUT);
   pinMode(LED_PIN, INPUT);
   Wire.end();  // Stop I2C
 
