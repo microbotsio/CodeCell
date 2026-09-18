@@ -1419,10 +1419,7 @@ void CodeCell::Motion_Read() {
     if (motion_id == SENSOR_REPORTID_STABILITY_CLASSIFIER) {
       _mstate_data = Motion.getStabilityClassifier();
       error_flag = 0;
-    } else {
-      // _mstate_data = 0;
-      // error_flag = 0;
-    }
+    } 
     if (motion_id == SENSOR_REPORTID_PERSONAL_ACTIVITY_CLASSIFIER) {
       _activity_data = Motion.getActivityClassifier();
       error_flag = 0;
@@ -1430,9 +1427,7 @@ void CodeCell::Motion_Read() {
     if (motion_id == SENSOR_REPORTID_TAP_DETECTOR) {
       _tap_event = true;
       error_flag = 0;
-    } else {
-      //error_flag = 0;
-    }
+    } 
 
     if (error_flag) {
       imu_read_timer++;
