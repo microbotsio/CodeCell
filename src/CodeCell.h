@@ -15,8 +15,12 @@
 #define LED_PIN 10U
 #endif
 
-#define SW_VERSION "2.0.7"
+#define SW_VERSION "2.0.8"
 #define MANUFACTURER "MICROBOTS"
+
+#ifndef CODECELL_DEBUG
+#define CODECELL_DEBUG 0
+#endif
 
 #define POWER_BAT_RUN 0U
 #define POWER_USB 1U
@@ -163,6 +167,7 @@ public:
   uint16_t Light_AmbientRead();
 
   void Motion_Init(uint32_t sense_motion);
+  void Motion_EnableReports(bool print_status = true);
   void Motion_Read();
   void Motion_AccelerometerRead(float &x, float &y, float &z);
   void Motion_GyroRead(float &x, float &y, float &z);
@@ -180,7 +185,6 @@ public:
 
 
 #endif
-
 
 
 
