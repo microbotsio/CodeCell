@@ -796,3 +796,9 @@ bool BNO085::saveCalibration() {
   }
   return true;
 }
+
+bool BNO085::wasReset() {
+  bool resetOccurred = _reset_occurred;
+  _reset_occurred = false;
+  return resetOccurred;
+}
