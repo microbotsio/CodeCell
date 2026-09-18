@@ -87,6 +87,7 @@ bool I2CRead(uint8_t add, uint8_t *buffer, size_t size);
 
 class BNO085 {
 public:
+bool wasReset();
 	bool begin(TwoWire &wirePort = Wire);
 	bool beginNoReset(TwoWire &wirePort);  // for wake resume: NO reset
 	void setNoResetOpen(bool en);
@@ -112,33 +113,33 @@ public:
 	bool modeOn();          //Use the executable channel to turn the BNO on
 	bool modeSleep();       //Use the executable channel to put the BNO to sleep
 
-	bool enableRotationVector(uint16_t timeBetweenReports = 10);
-	bool enableGeomagneticRotationVector(uint16_t timeBetweenReports = 10);
-	bool enableGameRotationVector(uint16_t timeBetweenReports = 10);
+	bool enableRotationVector(uint16_t timeBetweenReports = 10000);
+	bool enableGeomagneticRotationVector(uint16_t timeBetweenReports = 10000);
+	bool enableGameRotationVector(uint16_t timeBetweenReports = 10000);
 	bool enableARVRStabilizedRotationVector(uint16_t timeBetweenReports);
 	bool enableARVRStabilizedGameRotationVector(uint16_t timeBetweenReports);
-	bool enableAccelerometer(uint16_t timeBetweenReports = 10);
-	bool enableLinearAccelerometer(uint16_t timeBetweenReports = 10);
-	bool enableGravity(uint16_t timeBetweenReports = 10);
-	bool enableGyro(uint16_t timeBetweenReports = 10);
-	bool enableUncalibratedGyro(uint16_t timeBetweenReports = 10);
-	bool enableMagnetometer(uint16_t timeBetweenReports = 10);
-	bool enableStepCounter(uint16_t timeBetweenReports = 10);
-	bool enableStabilityClassifier(uint16_t timeBetweenReports = 10);
+	bool enableAccelerometer(uint16_t timeBetweenReports = 10000);
+	bool enableLinearAccelerometer(uint16_t timeBetweenReports = 10000);
+	bool enableGravity(uint16_t timeBetweenReports = 10000);
+	bool enableGyro(uint16_t timeBetweenReports = 10000);
+	bool enableUncalibratedGyro(uint16_t timeBetweenReports = 10000);
+	bool enableMagnetometer(uint16_t timeBetweenReports = 10000);
+	bool enableStepCounter(uint16_t timeBetweenReports = 10000);
+	bool enableStabilityClassifier(uint16_t timeBetweenReports = 10000);
 	bool enableActivityClassifier(uint16_t timeBetweenReports, uint32_t activitiesToEnable);
-	bool enableRawAccelerometer(uint16_t timeBetweenReports = 10);
-	bool enableRawGyro(uint16_t timeBetweenReports = 10);
-	bool enableRawMagnetometer(uint16_t timeBetweenReports = 10);
-	bool enableTapDetector(uint16_t timeBetweenReports = 10);
-	bool enableShakeDetector(uint16_t timeBetweenReports = 10);
-	bool enableStepDetector(uint16_t timeBetweenReports = 10);
-	bool enablePickupDetector(uint16_t timeBetweenReports = 10);
-	bool enableFlipDetector(uint16_t timeBetweenReports = 10);
-	bool enableStabilityDetector(uint16_t timeBetweenReports = 10);
-	bool enableSleepDetector(uint16_t timeBetweenReports = 10);
-	bool enableTiltDetector(uint16_t timeBetweenReports = 10);
-	bool enablePocketDetector(uint16_t timeBetweenReports = 10);
-	bool enableCircleDetector(uint16_t timeBetweenReports = 10);
+	bool enableRawAccelerometer(uint16_t timeBetweenReports = 10000);
+	bool enableRawGyro(uint16_t timeBetweenReports = 10000);
+	bool enableRawMagnetometer(uint16_t timeBetweenReports = 10000);
+	bool enableTapDetector(uint16_t timeBetweenReports = 10000);
+	bool enableShakeDetector(uint16_t timeBetweenReports = 10000);
+	bool enableStepDetector(uint16_t timeBetweenReports = 10000);
+	bool enablePickupDetector(uint16_t timeBetweenReports = 10000);
+	bool enableFlipDetector(uint16_t timeBetweenReports = 10000);
+	bool enableStabilityDetector(uint16_t timeBetweenReports = 10000);
+	bool enableSleepDetector(uint16_t timeBetweenReports = 10000);
+	bool enableTiltDetector(uint16_t timeBetweenReports = 10000);
+	bool enablePocketDetector(uint16_t timeBetweenReports = 10000);
+	bool enableCircleDetector(uint16_t timeBetweenReports = 10000);
 
 
 	float getRot_I();
