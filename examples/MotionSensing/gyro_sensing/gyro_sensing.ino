@@ -15,7 +15,7 @@
 
 CodeCell myCodeCell;
 
-float x = 0.0, y = 0.0, z = 0.0;           // Gyroscope readings (°/s)
+float x = 0.0, y = 0.0, z = 0.0;           // Gyroscope readings (rad/s)
 const float ROTATION_THRESHOLD = 3.0;      // Rotation speed threshold in degrees/sec
 
 void setup() {
