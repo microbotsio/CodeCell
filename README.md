@@ -150,7 +150,7 @@ After initialization, you can read the sensors using these functions:
 - Motion_StateRead()                                              // On Table=1, Stationary=2, Stable=3, Motion=4  
 - Motion_ActivityRead()                                           // Driving=1, Cycling=2, Walking=3/6, Still=4, Tilting=5, Running=7, Climbing=8  
 - Motion_AccelerometerRead(float &x, float &y, float &z)          // Accelerometer (m/s²)  
-- Motion_GyroRead(float &x, float &y, float &z)                   // Gyroscope (°/s)  
+- Motion_GyroRead(float &x, float &y, float &z)                   // Gyroscope (rad/s)  
 - Motion_MagnetometerRead(float &x, float &y, float &z)           // Magnetometer (µT)  
 - Motion_GravityRead(float &x, float &y, float &z)                // Gravity vector  
 - Motion_LinearAccRead(float &x, float &y, float &z)              // Linear acceleration  
