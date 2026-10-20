@@ -65,6 +65,18 @@ Make sure the ESP32 boards package is installed
 - Partition Scheme: 8M with SPIFFS (3 MB APP / 1.5 MB SPIFFS)  
 - Port: Select the COM port for your CodeCell C6
 
+### 🧰 PlatformIO Setup
+
+If you prefer PlatformIO, use the C6 Getting Started example:
+
+- Example: `examples/101_GettingStarted_platformio_c6`
+- Board: `esp32-c6-devkitc-1`
+- Framework: `arduino`
+- USB CDC: enabled via build flags
+- Serial speed: `115200`
+
+The example is set up for CodeCell C6 and uses the same `CodeCell` library API as the Arduino IDE examples.
+
 ### ⚙️ Init()
 
 To initialize the CodeCell, use the `myCodeCell.Init()` function with one or more predefined macros.  
@@ -201,4 +213,3 @@ This software is licensed from CEVA, Inc.
 Copyright (c) CEVA, Inc. and its licensors. All rights reserved.  
 CEVA and the CEVA logo are trademarks of CEVA, Inc.  
 For more information, visit [CEVA's website](https://www.ceva-dsp.com/app/motion-sensing/).
-
